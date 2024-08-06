@@ -1,0 +1,57 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/audit
+
+    username: postgres
+    password: 12345
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+application:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expiration: 7200000 # 2hours #3600000 = an hour
+      refresh-token:
+        expiration: 2592000000 # 30 days
+
+admin:
+  email: admin@mail.com
+
+default:
+  password: password
+
+
+upload:
+  folder: uploads
+
+server:
+  port: 8080
+file:
+  dwnUrl: /file/downloadFile/
+
+logging:
+  level:
+    com.company: INFO
+    # root: DEBUG
+  file:
+    name: logs/my_log.log
+#  pattern:
+#    console: "%d{yyyy-MM-dd HH:mm:ss} %highlight(%-5level) - %logger - %msg%n"
+#    file: "%d{yyyy-MM-dd HH:mm:ss} %-5level - %logger - %msg%n"
+#    rolling-file-name: logs/my-log-%d{yyyy-MM-dd}.%i.log
