@@ -64,9 +64,7 @@ public class AuditorService {
 
     public List<AuditorDTO> getAuditors(Set<AuditorEntity> auditors) {
         List<AuditorDTO> list = new ArrayList<>();
-        auditors.forEach(auditorEntity -> {
-            list.add(getAuditor(auditorEntity));
-        });
+        auditors.forEach(auditorEntity -> list.add(getAuditor(auditorEntity)));
         return list;
 
     }

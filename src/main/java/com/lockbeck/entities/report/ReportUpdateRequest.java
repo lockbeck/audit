@@ -1,7 +1,5 @@
 package com.lockbeck.entities.report;
 
-import com.lockbeck.entities.file.FileDTO;
-import com.lockbeck.entities.letter.LetterDTO;
 import lombok.Getter;
 import lombok.Setter;
 
