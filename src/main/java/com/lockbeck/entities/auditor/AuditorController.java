@@ -24,7 +24,16 @@ public class AuditorController {
     }
 
     @GetMapping("/getAudits/{id}")
-    public ResponseEntity<?> get(@PathVariable Integer id){
+    public ResponseEntity<?> getAudits(@PathVariable Integer id){
         return ResponseEntity.ok(service.getAudits(id));
+    }
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?> get(@PathVariable Integer id){
+        return ResponseEntity.ok(service.getById(id));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> update(@RequestBody AuditorUpdateRequest request){
+        return ResponseEntity.ok(service.update(request));
     }
 }

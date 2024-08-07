@@ -8,9 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -32,15 +34,15 @@ public class AuditorService {
         return new Response();
     }
 
-    public List<AuditorDTO> list() {
+    public Response list() {
         List<AuditorDTO> list = new ArrayList<>();
         for (AuditorEntity auditorEntity : repository.findAll()) {
             list.add(modelMapper.map(auditorEntity, AuditorDTO.class));
         }
-        return list;
+        return new Response(200,"success", LocalDateTime.now(),list);
     }
 
-    public List<AuditDTO> getAudits(Integer id) {
+    public Response getAudits(Integer id) {
         List<AuditDTO> list = new ArrayList<>();
         AuditorEntity auditor = get(id);
         for (AuditEntity audit : auditor.getAudits()) {
@@ -50,10 +52,34 @@ public class AuditorService {
             //to do rest
             list.add(dto);
         }
-        return list;
+        return new Response(200,"success", LocalDateTime.now(),list);
+    }
+
+    public AuditorDTO getById(Integer id) {
+        AuditorEntity auditor = get(id);
+        return modelMapper.map(auditor, AuditorDTO.class);
+    }
+
+    public Response update(AuditorUpdateRequest request) {
+        AuditorEntity auditor = get(request.getId());
+        auditor.setName(request.getName());
+        auditor.setEmail(request.getEmail());
+        auditor.setPhone(request.getPhone());
+        repository.save(auditor);
+
+        return new Response();
     }
 
     public AuditorDTO getAuditor(AuditorEntity auditor) {
         return modelMapper.map(auditor, AuditorDTO.class);
+    }
+
+    public List<AuditorDTO> getAuditors(Set<AuditorEntity> auditors) {
+        List<AuditorDTO> list = new ArrayList<>();
+        auditors.forEach(auditorEntity -> {
+            list.add(getAuditor(auditorEntity));
+        });
+        return list;
+
     }
 }

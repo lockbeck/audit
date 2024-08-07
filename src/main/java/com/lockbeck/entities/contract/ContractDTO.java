@@ -1,13 +1,15 @@
 package com.lockbeck.entities.contract;
 
 import com.lockbeck.entities.file.FileDTO;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 
 public class ContractDTO {
 

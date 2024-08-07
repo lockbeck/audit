@@ -13,9 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +58,7 @@ public class AuditService {
                 audit.setAuditStartDate(request.getAuditStartDate());
                 audit.setLeader(auditorService.get(request.getLeaderId()));
                 Set<AuditorEntity> set = new HashSet<>();
-                request.getAuditorIds().forEach(integer ->{
+                request.getAuditorIds().forEach(integer -> {
                     AuditorEntity auditor = auditorService.get(integer);
                     set.add(auditor);
                 });
@@ -79,12 +77,12 @@ public class AuditService {
                 audit.setStatus(AuditStatus.WAITING_REST_PAYMENT);
                 break;
 
-             case WAITING_REST_PAYMENT:
-                 audit.setRestPayment(request.getRestPayment());
-                 audit.setRestPaymentDate(request.getRestPaymentDate());
-                 audit.setAuditFinishDate(request.getAuditFinishDate());
-                 audit.setStatus(AuditStatus.FINISHED);
-                 break;
+            case WAITING_REST_PAYMENT:
+                audit.setRestPayment(request.getRestPayment());
+                audit.setRestPaymentDate(request.getRestPaymentDate());
+                audit.setAuditFinishDate(request.getAuditFinishDate());
+                audit.setStatus(AuditStatus.FINISHED);
+                break;
 
             default:
                 audit.setStatus(AuditStatus.FINISHED);
@@ -92,7 +90,7 @@ public class AuditService {
         }
         repository.save(audit);
 
-        return new Response(200,"audit o'zgartirildi", LocalDateTime.now());
+        return new Response(200, "audit o'zgartirildi", LocalDateTime.now());
     }
 
     private AuditEntity get(Integer id) {
@@ -101,5 +99,48 @@ public class AuditService {
             throw new NotFoundException("Audit topilmadi id: " + id);
         }
         return byId.get();
+    }
+
+    public Response list() {
+        List<AuditDTO> list = new ArrayList<>();
+        repository.findAll().forEach(entity -> {
+                    AuditDTO dto = getAudit(entity);
+
+                    list.add(dto);
+
+                }
+        );
+
+        return new Response(200, "success", LocalDateTime.now(), list);
+    }
+
+    public AuditDTO getById(Integer id) {
+        AuditEntity auditEntity = get(id);
+        return getAudit(auditEntity);
+    }
+    private AuditDTO getAudit(AuditEntity entity) {
+        AuditDTO dto = new AuditDTO();
+        dto.setId(entity.getId());
+        dto.setSubject(subjectService.getSubject(entity.getSubject()));
+        dto.setStatus(entity.getStatus());
+
+        dto.setInLetter(letterService.getLetter(entity.getInLetter()));
+        dto.setOutLetter(letterService.getLetter(entity.getOutLetter()));
+        dto.setContract(contractService.getContract(entity.getContract()));
+
+        dto.setHalfPayment(entity.getHalfPayment());
+        dto.setHalfPaymentDate(entity.getHalfPaymentDate());
+        dto.setAuditStartDate(entity.getAuditStartDate());
+
+        dto.setLeader(auditorService.getAuditor(entity.getLeader()));
+        dto.setAuditors(auditorService.getAuditors(entity.getAuditors()));
+        //listdoc
+        dto.setListDoc(fileService.getFileDto(entity.getListDoc()));
+        dto.setAuditFinishDate(entity.getAuditFinishDate());
+        dto.setRestPayment(entity.getRestPayment());
+        dto.setRestPaymentDate(entity.getRestPaymentDate());
+
+        dto.setReport(reportService.getReport(entity.getReport()));
+        return dto;
     }
 }

@@ -23,6 +23,11 @@ public class AuditController {
         return ResponseEntity.ok(service.update(request));
     }
 
+    @GetMapping("/list")
+    public ResponseEntity<?> list(){
+        return ResponseEntity.ok(service.list());
+    }
+
 
 
 

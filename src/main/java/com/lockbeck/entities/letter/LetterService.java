@@ -71,4 +71,22 @@ public class LetterService {
         }
         return list;
     }
+
+    public LetterDTO getLetter(LetterEntity inLetter) {
+        LetterDTO dto= new LetterDTO();
+        dto.setId(inLetter.getId());
+        dto.setNumber(inLetter.getNumber());
+        dto.setDate(inLetter.getDate());
+        dto.setIsOurLetter(inLetter.getIsOurLetter());
+        dto.setSubject(subjectService.getSubject(inLetter.getSubject()));
+        dto.setFile(fileService.getFileDto(inLetter.getFile()));
+        if(inLetter.getIsOurLetter()){
+            dto.setAuditor(auditorService.getAuditor(inLetter.getAuditor()));
+        }else {
+            dto.setEntryDate(inLetter.getEntryDate());
+            dto.setEntryNumber(inLetter.getEntryNumber());
+            dto.setStuff(stuffService.getStuff(inLetter.getStuff()));
+        }
+        return dto;
+    }
 }

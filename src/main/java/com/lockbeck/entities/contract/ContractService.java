@@ -57,4 +57,17 @@ public class ContractService {
         }
         return list;
     }
+
+    public ContractDTO getContract(ContractEntity contract) {
+        return ContractDTO.builder()
+                .id(contract.getId())
+                .date(contract.getDate())
+                .number(contract.getNumber())
+                .price(contract.getPrice())
+                .compNums(contract.getCompNums())
+                .serverNums(contract.getServerNums())
+                .objectAddress(contract.getObjectAddress())
+                .file(fileService.getFileDto(contract.getFile()))
+                .build();
+    }
 }

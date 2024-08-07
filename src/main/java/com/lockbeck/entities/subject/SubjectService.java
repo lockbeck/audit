@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,13 +31,13 @@ public class SubjectService {
         return new Response();
     }
 
-    public List<SubjectDTO> list() {
+    public Response list() {
         List<SubjectDTO> list = new ArrayList<>();
         for (SubjectEntity subject : repository.findAll()) {
             list.add(modelMapper.map(subject, SubjectDTO.class));
         }
 
-        return list;
+        return new Response(200,"Success", LocalDateTime.now(),list);
     }
 
     public SubjectDTO getSubject(SubjectEntity subject) {

@@ -42,4 +42,15 @@ public class ReportService {
     public List<ReportDTO> list() {
         return null;
     }
+
+    public ReportDTO getReport(ReportEntity report) {
+        return ReportDTO.builder()
+                .id(report.getId())
+                .number(report.getNumber())
+                .checkedComps(report.getCheckedComps())
+                .checkedServers(report.getCheckedServers())
+                .letter(letterService.getLetter(report.getLetter()))
+                .reportFile(fileService.getFileDto(report.getReportFile()))
+                .build();
+    }
 }

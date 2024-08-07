@@ -27,7 +27,7 @@ public class ContractEntity {
     private String objectAddress;
 
     @OneToOne(mappedBy = "contract")
-    AuditEntity audit;
+    private AuditEntity audit;
 
     @ManyToOne
     @JoinColumn(name = "file_id")

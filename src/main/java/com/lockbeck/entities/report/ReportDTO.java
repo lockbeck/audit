@@ -2,11 +2,13 @@ package com.lockbeck.entities.report;
 
 import com.lockbeck.entities.file.FileDTO;
 import com.lockbeck.entities.letter.LetterDTO;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ReportDTO {
     private int id;
     private String number;
