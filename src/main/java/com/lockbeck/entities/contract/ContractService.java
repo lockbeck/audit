@@ -20,14 +20,6 @@ public class ContractService {
     private final FileService fileService;
     private final ModelMapper modelMapper;
 
-    public ContractEntity get(Integer contractId) {
-        Optional<ContractEntity> byId = repository.findById(contractId);
-        if (byId.isEmpty()) {
-            throw new NotFoundException("shartnoma topilmadi id: "+contractId);
-        }
-        return byId.get();
-    }
-
     public Response create(ContractCreateRequest request) {
 
         ContractEntity entity = new ContractEntity();
@@ -44,18 +36,46 @@ public class ContractService {
         // Save contractEntity and return response
         repository.save(entity);
 
-        return new Response(202,"Shartnoma saqlandi", LocalDateTime.now());
+        return new Response(200,"Shartnoma saqlandi", LocalDateTime.now());
 
     }
 
-    public List<ContractDTO> list() {
+    public Response update(ContractUpdateRequest request) {
+
+        ContractEntity entity = get(request.getId());
+
+        entity.setDate(request.getDate());
+        entity.setNumber(request.getNumber());
+        entity.setPrice(request.getPrice());
+        entity.setCompNums(request.getCompNums());
+        entity.setServerNums(request.getServerNums());
+        entity.setObjectAddress(request.getObjectAddress());
+
+        // Manually set the FileEntity
+        entity.setFile(fileService.get(request.getFileId()));
+
+        // Save contractEntity and return response
+        repository.save(entity);
+        return new Response(200,"success", LocalDateTime.now());
+
+    }
+
+    public Response list() {
         List<ContractDTO> list = new ArrayList<>();
         for (ContractEntity entity : repository.findAll()) {
             ContractDTO map = modelMapper.map(entity, ContractDTO.class);
             map.setFile(fileService.getFileDto(entity.getFile()));
             list.add(map);
         }
-        return list;
+        return new Response(200,"success", LocalDateTime.now(), list);
+    }
+
+    public Response getById(Integer id) {
+        ContractEntity contractEntity = get(id);
+
+        ContractDTO dto = getContract(contractEntity);
+
+        return new Response(200,"success", LocalDateTime.now(),dto);
     }
 
     public ContractDTO getContract(ContractEntity contract) {
@@ -69,5 +89,13 @@ public class ContractService {
                 .objectAddress(contract.getObjectAddress())
                 .file(fileService.getFileDto(contract.getFile()))
                 .build();
+    }
+
+    public ContractEntity get(Integer contractId) {
+        Optional<ContractEntity> byId = repository.findById(contractId);
+        if (byId.isEmpty()) {
+            throw new NotFoundException("shartnoma topilmadi id: "+contractId);
+        }
+        return byId.get();
     }
 }

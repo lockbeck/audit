@@ -1,5 +1,6 @@
 package com.lockbeck.entities.contract;
 
+import com.lockbeck.demo.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +15,22 @@ import org.springframework.web.bind.annotation.*;
 public class ContractController {
     private final ContractService service;
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody ContractCreateRequest request){
+    public ResponseEntity<Response> create(@RequestBody ContractCreateRequest request){
         return ResponseEntity.ok(service.create(request));
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<Response> update(@RequestBody ContractUpdateRequest request){
+        return ResponseEntity.ok(service.update(request));
+    }
+
     @GetMapping("/list")
-    public ResponseEntity<?> list(){
+    public ResponseEntity<Response> list(){
         return ResponseEntity.ok(service.list());
+    }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Response> get(@PathVariable Integer id){
+        return ResponseEntity.ok(service.getById(id));
     }
 }

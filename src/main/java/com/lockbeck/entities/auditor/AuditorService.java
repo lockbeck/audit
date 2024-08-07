@@ -20,17 +20,18 @@ public class AuditorService {
     private final AuditorRepository repository;
     private final ModelMapper modelMapper;
 
-    public AuditorEntity get(Integer auditorId) {
-        Optional<AuditorEntity> byId = repository.findById(auditorId);
-        if (byId.isEmpty()) {
-            throw new NotFoundException("Tashkilot topilmadi id: " + auditorId);
-        }
-        return byId.get();
-
-    }
-
     public Response create(AuditorCreateRequest request) {
         repository.save(modelMapper.map(request, AuditorEntity.class));
+        return new Response();
+    }
+
+    public Response update(AuditorUpdateRequest request) {
+        AuditorEntity auditor = get(request.getId());
+        auditor.setName(request.getName());
+        auditor.setEmail(request.getEmail());
+        auditor.setPhone(request.getPhone());
+        repository.save(auditor);
+
         return new Response();
     }
 
@@ -55,23 +56,10 @@ public class AuditorService {
         return new Response(200,"success", LocalDateTime.now(),list);
     }
 
-    public AuditorDTO getById(Integer id) {
+    public Response getById(Integer id) {
         AuditorEntity auditor = get(id);
-        return modelMapper.map(auditor, AuditorDTO.class);
-    }
-
-    public Response update(AuditorUpdateRequest request) {
-        AuditorEntity auditor = get(request.getId());
-        auditor.setName(request.getName());
-        auditor.setEmail(request.getEmail());
-        auditor.setPhone(request.getPhone());
-        repository.save(auditor);
-
-        return new Response();
-    }
-
-    public AuditorDTO getAuditor(AuditorEntity auditor) {
-        return modelMapper.map(auditor, AuditorDTO.class);
+        AuditorDTO dto = getAuditor(auditor);
+        return new Response(200,"success", LocalDateTime.now(),dto);
     }
 
     public List<AuditorDTO> getAuditors(Set<AuditorEntity> auditors) {
@@ -80,6 +68,19 @@ public class AuditorService {
             list.add(getAuditor(auditorEntity));
         });
         return list;
+
+    }
+
+    public AuditorDTO getAuditor(AuditorEntity auditor) {
+        return modelMapper.map(auditor, AuditorDTO.class);
+    }
+
+    public AuditorEntity get(Integer auditorId) {
+        Optional<AuditorEntity> byId = repository.findById(auditorId);
+        if (byId.isEmpty()) {
+            throw new NotFoundException("Tashkilot topilmadi id: " + auditorId);
+        }
+        return byId.get();
 
     }
 }

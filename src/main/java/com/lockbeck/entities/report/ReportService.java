@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,14 +18,6 @@ public class ReportService {
     private final ReportRepository repository;
     private final LetterService letterService;
     private final FileService fileService;
-
-    public ReportEntity get(Integer reportId) {
-        Optional<ReportEntity> byId = repository.findById(reportId);
-        if (byId.isEmpty()) {
-            throw new NotFoundException("Hisobot topilmadi id: "+reportId);
-        }
-        return byId.get();
-    }
 
     public Response create(ReportCreateRequest request) {
         ReportEntity report = new ReportEntity();
@@ -36,11 +29,36 @@ public class ReportService {
 
         repository.save(report);
 
-        return new Response(202,"Saqlandi", LocalDateTime.now());
+        return new Response(200,"Saqlandi", LocalDateTime.now());
     }
 
-    public List<ReportDTO> list() {
-        return null;
+    public Response update(ReportUpdateRequest request){
+        ReportEntity report = get(request.getId());
+
+        report.setNumber(request.getNumber());
+        report.setCheckedComps(request.getCheckedComps());
+        report.setCheckedServers(request.getCheckedServers());
+        report.setLetter(letterService.get(request.getLetterId()));
+        report.setReportFile(fileService.getFile(request.getReportFileId()));
+
+        repository.save(report);
+
+        return  new Response(200,"Hisobot o'zgartirildi", LocalDateTime.now());
+    }
+
+    public Response list() {
+        List<ReportDTO> dtos = new ArrayList<>();
+        for (ReportEntity report : repository.findAll()) {
+            ReportDTO dto = getReport(report);
+            dtos.add(dto);
+        }
+        return new Response(200,"success", LocalDateTime.now(), dtos);
+    }
+
+    public Response getById(Integer id) {
+        ReportEntity report = get(id);
+        ReportDTO dto = getReport(report);
+        return new Response(200,"success", LocalDateTime.now(), dto);
     }
 
     public ReportDTO getReport(ReportEntity report) {
@@ -52,5 +70,13 @@ public class ReportService {
                 .letter(letterService.getLetter(report.getLetter()))
                 .reportFile(fileService.getFileDto(report.getReportFile()))
                 .build();
+    }
+
+    public ReportEntity get(Integer reportId) {
+        Optional<ReportEntity> byId = repository.findById(reportId);
+        if (byId.isEmpty()) {
+            throw new NotFoundException("Hisobot topilmadi id: "+reportId);
+        }
+        return byId.get();
     }
 }

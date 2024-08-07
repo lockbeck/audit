@@ -16,19 +16,22 @@ import java.util.Optional;
 public class SubjectService {
     private final SubjectRepository repository;
     private final ModelMapper modelMapper;
-    public SubjectEntity get(Integer subjectId) {
-        Optional<SubjectEntity> byId = repository.findById(subjectId);
-        if (byId.isEmpty()) {
-            throw new NotFoundException("Tashkilot topilmadi id: " + subjectId);
-        }
-        return byId.get();
-    }
-
     public Response create(SubjectCreateRequest request) {
 
         SubjectEntity entity = modelMapper.map(request, SubjectEntity.class);
         repository.save(entity);
         return new Response();
+    }
+
+    public Response update(SubjectUpdateDTO request) {
+        SubjectEntity subject = get(request.getId());
+        subject.setName(request.getName());
+        subject.setAddress(request.getAddress());
+        subject.setEmail(request.getEmail());
+        subject.setPhone(request.getPhone());
+        repository.save(subject);
+        return new Response(200,"Success", LocalDateTime.now());
+
     }
 
     public Response list() {
@@ -38,6 +41,20 @@ public class SubjectService {
         }
 
         return new Response(200,"Success", LocalDateTime.now(),list);
+    }
+
+    public Response getById(Integer id) {
+        SubjectEntity subject = get(id);
+        SubjectDTO dto = getSubject(subject);
+        return new Response(200,"Success", LocalDateTime.now(),dto);
+    }
+
+    public SubjectEntity get(Integer subjectId) {
+        Optional<SubjectEntity> byId = repository.findById(subjectId);
+        if (byId.isEmpty()) {
+            throw new NotFoundException("Tashkilot topilmadi id: " + subjectId);
+        }
+        return byId.get();
     }
 
     public SubjectDTO getSubject(SubjectEntity subject) {

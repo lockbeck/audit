@@ -32,7 +32,7 @@ public class AuditService {
         entity.setInLetter(letterService.get(request.getInLetterId()));
         entity.setStatus(AuditStatus.REQUESTED);
         repository.save(entity);
-        return new Response(202, "audit yaratildi", LocalDateTime.now());
+        return new Response(200, "audit yaratildi", LocalDateTime.now());
     }
 
     public Response update(AuditUpdateRequest request) {
@@ -93,14 +93,6 @@ public class AuditService {
         return new Response(200, "audit o'zgartirildi", LocalDateTime.now());
     }
 
-    private AuditEntity get(Integer id) {
-        Optional<AuditEntity> byId = repository.findById(id);
-        if (byId.isEmpty()) {
-            throw new NotFoundException("Audit topilmadi id: " + id);
-        }
-        return byId.get();
-    }
-
     public Response list() {
         List<AuditDTO> list = new ArrayList<>();
         repository.findAll().forEach(entity -> {
@@ -114,10 +106,20 @@ public class AuditService {
         return new Response(200, "success", LocalDateTime.now(), list);
     }
 
-    public AuditDTO getById(Integer id) {
+    public Response getById(Integer id) {
         AuditEntity auditEntity = get(id);
-        return getAudit(auditEntity);
+        AuditDTO dto = getAudit(auditEntity);
+        return new Response(200, "success", LocalDateTime.now(), dto);
     }
+
+    private AuditEntity get(Integer id) {
+        Optional<AuditEntity> byId = repository.findById(id);
+        if (byId.isEmpty()) {
+            throw new NotFoundException("Audit topilmadi id: " + id);
+        }
+        return byId.get();
+    }
+
     private AuditDTO getAudit(AuditEntity entity) {
         AuditDTO dto = new AuditDTO();
         dto.setId(entity.getId());

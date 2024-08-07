@@ -1,5 +1,6 @@
 package com.lockbeck.entities.stuff;
 
+import com.lockbeck.demo.Response;
 import com.lockbeck.entities.subject.SubjectCreateRequest;
 import com.lockbeck.entities.subject.SubjectService;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +17,22 @@ import org.springframework.web.bind.annotation.*;
 public class StuffController {
     private final StuffService service;
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody StuffCreateRequest request){
+    public ResponseEntity<Response> create(@RequestBody StuffCreateRequest request){
         return ResponseEntity.ok(service.create(request));
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<Response> update(@RequestBody StuffUpdateDTO request){
+        return ResponseEntity.ok(service.update(request));
+    }
+
     @GetMapping("/list")
-    public ResponseEntity<?> list(){
+    public ResponseEntity<Response> list(){
         return ResponseEntity.ok(service.list());
+    }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Response> get(@PathVariable Integer id){
+        return ResponseEntity.ok(service.getById(id));
     }
 }
