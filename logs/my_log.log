@@ -1826,3 +1826,29 @@ org.postgresql.util.PSQLException: ERROR: value too long for type character vary
 2024-08-08T14:40:54.974+05:00  INFO 15060 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2024-08-08T14:40:55.035+05:00  INFO 15060 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2024-08-08T14:40:55.052+05:00  INFO 15060 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-08-08T14:41:02.427+05:00  INFO 15412 --- [main] com.lockbeck.AuditApplication            : Starting AuditApplication using Java 17.0.11 with PID 15412 (C:\Users\tloch\Desktop\audit\target\classes started by tloch in C:\Users\tloch\Desktop\audit)
+2024-08-08T14:41:02.428+05:00  INFO 15412 --- [main] com.lockbeck.AuditApplication            : No active profile set, falling back to 1 default profile: "default"
+2024-08-08T14:41:03.296+05:00  INFO 15412 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-08-08T14:41:03.391+05:00  INFO 15412 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 85 ms. Found 14 JPA repository interfaces.
+2024-08-08T14:41:03.995+05:00  INFO 15412 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-08-08T14:41:04.007+05:00  INFO 15412 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-08-08T14:41:04.008+05:00  INFO 15412 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.26]
+2024-08-08T14:41:04.086+05:00  INFO 15412 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-08-08T14:41:04.086+05:00  INFO 15412 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1616 ms
+2024-08-08T14:41:04.257+05:00  INFO 15412 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-08-08T14:41:04.337+05:00  INFO 15412 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-08-08T14:41:04.385+05:00  INFO 15412 --- [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-08-08T14:41:04.721+05:00  INFO 15412 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-08-08T14:41:04.757+05:00  INFO 15412 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-08-08T14:41:05.082+05:00  INFO 15412 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5bde6148
+2024-08-08T14:41:05.084+05:00  INFO 15412 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-08-08T14:41:05.128+05:00  WARN 15412 --- [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-08-08T14:41:05.475+05:00  WARN 15412 --- [main] org.hibernate.id.UUIDHexGenerator        : HHH000409: Using org.hibernate.id.UUIDHexGenerator which does not generate IETF RFC 4122 compliant UUID values; consider using org.hibernate.id.UUIDGenerator instead
+2024-08-08T14:41:06.423+05:00  INFO 15412 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-08-08T14:41:06.643+05:00  INFO 15412 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-08-08T14:41:06.994+05:00  INFO 15412 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-08-08T14:41:07.845+05:00  INFO 15412 --- [main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2024-08-08T14:41:07.845+05:00  WARN 15412 --- [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
+2024-08-08T14:41:07.948+05:00  WARN 15412 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-08-08T14:41:08.634+05:00  INFO 15412 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2024-08-08T14:41:08.644+05:00  INFO 15412 --- [main] com.lockbeck.AuditApplication            : Started AuditApplication in 6.698 seconds (process running for 7.345)
