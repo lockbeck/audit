@@ -174,18 +174,7 @@ public class   UserService {
 
 
     }
-    public UserDTO getUserDTOById(Integer id){
-        UserEntity entity = get(id);
-        UserDTO dto = new UserDTO();
-        dto.setId(entity.getId());
-        dto.setName(entity.getName());
-        dto.setUsername(entity.getUsername());
-        dto.setEmail(entity.getEmail());
-        dto.setRole(entity.getRole());
-        return dto;
 
-
-    }
     public Response delete(Integer id) {
         UserEntity entity = get(id);
         List<Token> byUserId = tokenRepository.findByUserEntityId(id);
@@ -197,7 +186,6 @@ public class   UserService {
         return new Response(200,"User was successfully deleted");
     }
     public Response update(UserUpdateDTO dto){
-        UserEntity currentUser = getCurrentUser();
         Optional<UserEntity> byUsername = userRepository.findByUsername(dto.getUsername());
 
         if (byUsername.isPresent()) {

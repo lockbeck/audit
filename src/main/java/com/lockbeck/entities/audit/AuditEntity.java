@@ -5,7 +5,6 @@ import com.lockbeck.entities.contract.ContractEntity;
 import com.lockbeck.entities.file.FileEntity;
 import com.lockbeck.entities.letter.LetterEntity;
 import com.lockbeck.entities.report.ReportEntity;
-import com.lockbeck.entities.subject.SubjectEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -61,11 +60,11 @@ public class AuditEntity {
     @JoinColumn(name = "report_id")
     private ReportEntity report;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "audit_auditor",
             joinColumns = {@JoinColumn(name = "audit_id")},
             inverseJoinColumns = {@JoinColumn(name = "auditor_id")}
     )
-    Set<AuditorEntity> auditors = new HashSet<>();
+    private Set<AuditorEntity> auditors = new HashSet<>();
 }

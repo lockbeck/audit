@@ -1,15 +1,12 @@
 package com.lockbeck.entities.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lockbeck.demo.Response;
 import com.lockbeck.entities.audit.AuditService;
-import com.lockbeck.entities.json.antivirus.Antivirus;
 import com.lockbeck.entities.json.antivirus.AntivirusRepository;
 import com.lockbeck.entities.json.antivirus.AntivirusService;
 import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowserRepository;
 import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowserService;
 import com.lockbeck.entities.json.usb.UsbRepository;
-import com.lockbeck.entities.json.usb.UsbService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

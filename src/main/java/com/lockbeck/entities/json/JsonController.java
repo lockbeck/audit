@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.nio.file.Files.copy;
@@ -32,7 +33,7 @@ public class JsonController {
     public ResponseEntity<List<String>> uploadFiles(@RequestParam("file") List<MultipartFile> files) throws IOException {
         List<String> response = new ArrayList<>();
         for (MultipartFile file : files) {
-            String filename = StringUtils.cleanPath(file.getOriginalFilename());
+            String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
             Path fileStorage = get(DIRECTORY,filename).toAbsolutePath().normalize();
             copy(file.getInputStream(),fileStorage,REPLACE_EXISTING);
             response.add(filename);

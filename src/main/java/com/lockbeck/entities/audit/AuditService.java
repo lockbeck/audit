@@ -7,12 +7,10 @@ import com.lockbeck.entities.contract.ContractService;
 import com.lockbeck.entities.file.FileService;
 import com.lockbeck.entities.letter.LetterService;
 import com.lockbeck.entities.report.ReportService;
-import com.lockbeck.entities.subject.SubjectService;
 import com.lockbeck.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service

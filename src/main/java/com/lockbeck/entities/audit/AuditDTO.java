@@ -3,11 +3,8 @@ package com.lockbeck.entities.audit;
 import com.lockbeck.entities.auditor.AuditorDTO;
 import com.lockbeck.entities.contract.ContractDTO;
 import com.lockbeck.entities.file.FileDTO;
-import com.lockbeck.entities.file.FileEntity;
 import com.lockbeck.entities.letter.LetterDTO;
 import com.lockbeck.entities.report.ReportDTO;
-import com.lockbeck.entities.stuff.StuffDTO;
-import com.lockbeck.entities.subject.SubjectDTO;
 import lombok.Getter;
 import lombok.Setter;
 

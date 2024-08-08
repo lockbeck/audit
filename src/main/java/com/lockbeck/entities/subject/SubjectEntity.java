@@ -1,10 +1,8 @@
 package com.lockbeck.entities.subject;
 
-import com.lockbeck.entities.audit.AuditEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
 
 @Getter
 @Setter
