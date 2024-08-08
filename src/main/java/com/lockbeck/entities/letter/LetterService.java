@@ -38,7 +38,7 @@ public class LetterService {
             entity.setEntryNumber(request.getEntryNumber());
         }
         repository.save(entity);
-        return new Response(200,"success", LocalDateTime.now());
+        return new Response(200,"success");
 
     }
 
@@ -57,7 +57,7 @@ public class LetterService {
             entity.setEntryNumber(request.getEntryNumber());
         }
         repository.save(entity);
-        return new Response(200,"success", LocalDateTime.now());
+        return new Response(200,"success");
 
     }
 
@@ -69,7 +69,7 @@ public class LetterService {
             LetterDTO dto = getLetter(entity);
             list.add(dto);
         }
-        return new Response(200,"success", LocalDateTime.now(),list);
+        return new Response(200,"success",list);
     }
 
 
@@ -77,7 +77,7 @@ public class LetterService {
     public Response getById(Integer id) {
         LetterEntity letter = get(id);
         LetterDTO dto = getLetter(letter);
-        return new Response(200,"success", LocalDateTime.now(),dto);
+        return new Response(200,"success",dto);
     }
 
     public LetterEntity get(Integer inLetterId) {

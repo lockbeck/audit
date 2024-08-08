@@ -2,10 +2,7 @@ package com.lockbeck.entities.json;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -43,8 +40,8 @@ public class JsonController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping("/upload-json")
-    public String uploadJsonFiles(@RequestParam("files") MultipartFile[] files) throws IOException {
+    @PostMapping("/upload-json/{auditId}")
+    public String uploadJsonFiles(@RequestParam("files") MultipartFile[] files, @PathVariable("auditId")Integer auditId) throws IOException {
         List<File> jsonFiles = Arrays.stream(files)
                 .map(file -> {
                     try {
@@ -56,7 +53,7 @@ public class JsonController {
                     }
                 }).collect(Collectors.toList());
 
-        jsonService.processJsonFiles(jsonFiles);
+        jsonService.processJsonFiles(jsonFiles,auditId);
 
         return "Files processed successfully";
     }

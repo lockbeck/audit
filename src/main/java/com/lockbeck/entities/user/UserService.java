@@ -52,7 +52,7 @@ public class   UserService {
         UserEntity entity = get(userId);
         entity.setPassword(passwordEncoder.encode(requestAdmin.getPassword()));
         userRepository.save(entity);
-        return new Response(200,entity.getName()+"'ning paroli muvaffaqiyatli o'zgartirildi", LocalDateTime.now());
+        return new Response(200,entity.getName()+"'ning paroli muvaffaqiyatli o'zgartirildi");
     }
     public Response createUser(UserCreateDTO dto) {
         Optional<UserEntity> byUsername = userRepository.findByUsername(dto.getUsername());
@@ -89,7 +89,7 @@ public class   UserService {
                 .email(save.getEmail())
                 .role(save.getRole())
                 .build();
-        return new Response(201,"User was successfully created",LocalDateTime.now(),userDTO);
+        return new Response(201,"User was successfully created",userDTO);
     }
 
     public List<UserDTO> getUsers() {
@@ -194,7 +194,7 @@ public class   UserService {
         }
         entity.setDeleted(Boolean.TRUE);
         userRepository.save(entity);
-        return new Response(200,"User was successfully deleted",LocalDateTime.now());
+        return new Response(200,"User was successfully deleted");
     }
     public Response update(UserUpdateDTO dto){
         UserEntity currentUser = getCurrentUser();
@@ -220,7 +220,7 @@ public class   UserService {
         entity.setEmail(dto.getEmail());
         entity.setRole(dto.getRole());
         userRepository.save(entity);
-        return new Response(200,"Foydalanuvchi ma'lumotlari o'zgartirildi",LocalDateTime.now(),dto);
+        return new Response(200,"Foydalanuvchi ma'lumotlari o'zgartirildi",dto);
     }
 
 

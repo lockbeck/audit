@@ -35,7 +35,7 @@ public class ContractService {
         // Save contractEntity and return response
         repository.save(entity);
 
-        return new Response(200,"Shartnoma saqlandi", LocalDateTime.now());
+        return new Response(200,"Shartnoma saqlandi");
 
     }
 
@@ -55,7 +55,7 @@ public class ContractService {
 
         // Save contractEntity and return response
         repository.save(entity);
-        return new Response(200,"success", LocalDateTime.now());
+        return new Response(200,"success");
 
     }
 
@@ -66,7 +66,7 @@ public class ContractService {
             map.setFile(fileService.getFileDto(entity.getFile()));
             list.add(map);
         }
-        return new Response(200,"success", LocalDateTime.now(), list);
+        return new Response(200,"success",  list);
     }
 
     public Response getById(Integer id) {
@@ -74,7 +74,7 @@ public class ContractService {
 
         ContractDTO dto = getContract(contractEntity);
 
-        return new Response(200,"success", LocalDateTime.now(),dto);
+        return new Response(200,"success", dto);
     }
 
     public ContractDTO getContract(ContractEntity contract) {

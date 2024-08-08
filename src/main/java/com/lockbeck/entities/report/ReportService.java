@@ -29,7 +29,7 @@ public class ReportService {
 
         repository.save(report);
 
-        return new Response(200,"Saqlandi", LocalDateTime.now());
+        return new Response(200,"Saqlandi");
     }
 
     public Response update(ReportUpdateRequest request){
@@ -43,7 +43,7 @@ public class ReportService {
 
         repository.save(report);
 
-        return  new Response(200,"Hisobot o'zgartirildi", LocalDateTime.now());
+        return  new Response(200,"Hisobot o'zgartirildi");
     }
 
     public Response list() {
@@ -52,13 +52,13 @@ public class ReportService {
             ReportDTO dto = getReport(report);
             dtos.add(dto);
         }
-        return new Response(200,"success", LocalDateTime.now(), dtos);
+        return new Response(200,"success",  dtos);
     }
 
     public Response getById(Integer id) {
         ReportEntity report = get(id);
         ReportDTO dto = getReport(report);
-        return new Response(200,"success", LocalDateTime.now(), dto);
+        return new Response(200,"success", dto);
     }
 
     public ReportDTO getReport(ReportEntity report) {

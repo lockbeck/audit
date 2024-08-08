@@ -40,7 +40,7 @@ public class AuditorService {
         for (AuditorEntity auditorEntity : repository.findAll()) {
             list.add(modelMapper.map(auditorEntity, AuditorDTO.class));
         }
-        return new Response(200,"success", LocalDateTime.now(),list);
+        return new Response(200,"success", list);
     }
 
     public Response getAudits(Integer id) {
@@ -53,13 +53,13 @@ public class AuditorService {
             //to do rest
             list.add(dto);
         }
-        return new Response(200,"success", LocalDateTime.now(),list);
+        return new Response(200,"success", list);
     }
 
     public Response getById(Integer id) {
         AuditorEntity auditor = get(id);
         AuditorDTO dto = getAuditor(auditor);
-        return new Response(200,"success", LocalDateTime.now(),dto);
+        return new Response(200,"success", dto);
     }
 
     public List<AuditorDTO> getAuditors(Set<AuditorEntity> auditors) {

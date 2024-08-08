@@ -2,8 +2,13 @@ package com.lockbeck.entities.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lockbeck.demo.Response;
+import com.lockbeck.entities.audit.AuditService;
+import com.lockbeck.entities.json.antivirus.Antivirus;
+import com.lockbeck.entities.json.antivirus.AntivirusRepository;
 import com.lockbeck.entities.json.antivirus.AntivirusService;
+import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowserRepository;
 import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowserService;
+import com.lockbeck.entities.json.usb.UsbRepository;
 import com.lockbeck.entities.json.usb.UsbService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +23,12 @@ import java.util.List;
 public class JsonService {
     private final JsonRepository jsonRepository;
     private final AntivirusService antivirusService;
-    private final UsbService usbService;
     private final SocialAppsInBrowserService socialAppsInBrowserService;
     private final ObjectMapper objectMapper;
+    private final AntivirusRepository antivirusRepository;
+    private final UsbRepository usbRepository;
+    private final SocialAppsInBrowserRepository socialAppsInBrowserRepository;
+    private final AuditService auditService;
 
     public void create(JsonCreateRequest request){
         JsonEntity entity = new JsonEntity();
@@ -47,10 +55,15 @@ public class JsonService {
     }
 
     @Transactional
-    public void processJsonFiles(List<File> jsonFiles) throws IOException {
+    public void processJsonFiles(List<File> jsonFiles,Integer auditId) throws IOException {
         for (File jsonFile : jsonFiles) {
             JsonEntity jsonEntity = objectMapper.readValue(jsonFile, JsonEntity.class);
+            jsonEntity.setAudit(auditService.get(auditId));
             jsonRepository.save(jsonEntity);
+            antivirusRepository.saveAll(jsonEntity.getAntivirus());
+            usbRepository.saveAll(jsonEntity.getUsb());
+            socialAppsInBrowserRepository.saveAll(jsonEntity.getSocialAppsInBrowser());
+
         }
     }
 }

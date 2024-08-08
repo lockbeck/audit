@@ -2,6 +2,7 @@ package com.lockbeck.entities.json;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lockbeck.entities.audit.AuditEntity;
 import com.lockbeck.entities.json.antivirus.Antivirus;
 import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowser;
 import com.lockbeck.entities.json.usb.USB;
@@ -64,6 +65,7 @@ public class JsonEntity {
     private Boolean internet;
 
     @JsonProperty("NetworkStatus")
+    @Column(columnDefinition = "varchar(10000)")
     private String networkStatus;
 
     @JsonProperty("USB")
@@ -96,4 +98,8 @@ public class JsonEntity {
     @OneToMany(mappedBy = "json")
     @JsonManagedReference
     private List<SocialAppsInBrowser> socialAppsInBrowser;
+
+    @ManyToOne
+    @JoinColumn(name = "audit_id")
+    private AuditEntity audit;
 }

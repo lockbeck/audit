@@ -22,6 +22,7 @@ public class SocialAppsInBrowser {
     private String name;
 
     @JsonProperty("Url")
+    @Column(columnDefinition = "varchar(10000)")
     private String url;
 
     @JsonProperty("LastSeen")

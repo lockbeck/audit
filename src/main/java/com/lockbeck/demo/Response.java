@@ -14,15 +14,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Response {
-    public Response(int status, String msg,LocalDateTime timestamp) {
+    public Response(int status, String msg) {
         this.status = status;
         this.msg = msg;
-        this.timestamp= timestamp;
     }
 
     private int status;
     private String msg;
-    private LocalDateTime timestamp;
     private Object data;
 
 }

@@ -30,7 +30,7 @@ public class AuditService {
         entity.setInLetter(letterService.get(request.getInLetterId()));
         entity.setStatus(AuditStatus.REQUESTED);
         repository.save(entity);
-        return new Response(200, "audit yaratildi", LocalDateTime.now());
+        return new Response(200, "audit yaratildi" );
     }
 
     public Response update(AuditUpdateRequest request) {
@@ -88,7 +88,7 @@ public class AuditService {
         }
         repository.save(audit);
 
-        return new Response(200, "audit o'zgartirildi", LocalDateTime.now());
+        return new Response(200, "audit o'zgartirildi");
     }
 
     public Response list() {
@@ -101,16 +101,16 @@ public class AuditService {
                 }
         );
 
-        return new Response(200, "success", LocalDateTime.now(), list);
+        return new Response(200, "success",  list);
     }
 
     public Response getById(Integer id) {
         AuditEntity auditEntity = get(id);
         AuditDTO dto = getAudit(auditEntity);
-        return new Response(200, "success", LocalDateTime.now(), dto);
+        return new Response(200, "success",  dto);
     }
 
-    private AuditEntity get(Integer id) {
+    public AuditEntity get(Integer id) {
         Optional<AuditEntity> byId = repository.findById(id);
         if (byId.isEmpty()) {
             throw new NotFoundException("Audit topilmadi id: " + id);

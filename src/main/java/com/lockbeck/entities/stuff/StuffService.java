@@ -29,7 +29,7 @@ public class StuffService {
         stuff.setEmail(dto.getEmail());
         stuff.setPhone(dto.getPhone());
         repository.save(stuff);
-        return new Response(200,"success",LocalDateTime.now());
+        return new Response(200,"success");
 
     }
 
@@ -38,12 +38,12 @@ public class StuffService {
         for (StuffEntity stuffEntity : repository.findAll()) {
             list.add(modelMapper.map(stuffEntity, StuffDTO.class));
         }
-        return new Response(200,"success",LocalDateTime.now(),list);
+        return new Response(200,"success",list);
     }
 
     public Response getById(Integer id) {
         StuffEntity stuff = get(id);
-        return new Response(200,"success", LocalDateTime.now(),getStuff(stuff));
+        return new Response(200,"success",getStuff(stuff));
     }
 
     public StuffDTO getStuff(StuffEntity stuff) {
