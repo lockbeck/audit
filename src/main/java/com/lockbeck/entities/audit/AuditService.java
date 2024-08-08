@@ -19,7 +19,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class AuditService {
     private final AuditRepository repository;
-    private final SubjectService subjectService;
     private final LetterService letterService;
     private final ContractService contractService;
     private final AuditorService auditorService;
@@ -28,7 +27,6 @@ public class AuditService {
 
     public Response create(AuditCreateRequest request) {
         AuditEntity entity = new AuditEntity();
-        entity.setSubject(subjectService.get(request.getSubjectId()));
         entity.setInLetter(letterService.get(request.getInLetterId()));
         entity.setStatus(AuditStatus.REQUESTED);
         repository.save(entity);
@@ -123,7 +121,7 @@ public class AuditService {
     private AuditDTO getAudit(AuditEntity entity) {
         AuditDTO dto = new AuditDTO();
         dto.setId(entity.getId());
-        dto.setSubject(subjectService.getSubject(entity.getSubject()));
+        dto.setSubject(entity.getInLetter().getSubject().getName());
         dto.setStatus(entity.getStatus());
 
         dto.setInLetter(letterService.getLetter(entity.getInLetter()));

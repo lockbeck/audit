@@ -18,7 +18,7 @@ import java.util.List;
 @Setter
 public class AuditDTO {
     private Integer id;
-    private SubjectDTO subject;
+    private String subject;
     private AuditStatus status;
 
     private LetterDTO inLetter;

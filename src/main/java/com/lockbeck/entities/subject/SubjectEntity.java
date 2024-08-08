@@ -22,8 +22,6 @@ public class SubjectEntity {
     private String phone;
     private String email;
 
-    @OneToMany(mappedBy = "subject")
-    private List<AuditEntity> audits;
 
     // Getters and Setters
 }

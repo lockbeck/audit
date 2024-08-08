@@ -37,7 +37,7 @@ public class SubjectService {
     public Response list() {
         List<SubjectDTO> list = new ArrayList<>();
         for (SubjectEntity subject : repository.findAll()) {
-            list.add(modelMapper.map(subject, SubjectDTO.class));
+            list.add(getSubject(subject));
         }
 
         return new Response(200,"Success", LocalDateTime.now(),list);
@@ -58,6 +58,13 @@ public class SubjectService {
     }
 
     public SubjectDTO getSubject(SubjectEntity subject) {
-        return modelMapper.map(subject, SubjectDTO.class);
+
+        return SubjectDTO.builder()
+                .id(subject.getId())
+                .name(subject.getName())
+                .phone(subject.getPhone())
+                .address(subject.getAddress())
+                .email(subject.getEmail())
+                .build();
     }
 }

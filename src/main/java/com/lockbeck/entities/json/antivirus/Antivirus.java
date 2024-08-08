@@ -1,5 +1,7 @@
 package com.lockbeck.entities.json.antivirus;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lockbeck.entities.json.JsonEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,14 +18,18 @@ public class Antivirus{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    public String name;
+    @JsonProperty("Name")
+    private String name;
 
-    public String status;
+    @JsonProperty("Status")
+    private String status;
 
-    public String updatedAt;
+    @JsonProperty("UpdatedAt")
+    private String updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "json_id")
+    @JsonBackReference
     private JsonEntity json;
 
 

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
-@RequestMapping("/api/v1/initController")
+@RequestMapping("/initController")
 @RestController
 @RequiredArgsConstructor
 public class InitController {

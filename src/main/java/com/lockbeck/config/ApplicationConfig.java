@@ -1,5 +1,6 @@
 package com.lockbeck.config;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lockbeck.auditing.ApplicationAuditAware;
 import com.lockbeck.entities.user.UserRepository;
@@ -53,6 +54,9 @@ public class ApplicationConfig {
 
    @Bean
   public ObjectMapper objectMapper() {
-    return new ObjectMapper();
+
+    ObjectMapper mapper = new ObjectMapper();
+     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+     return mapper;
   }
 }

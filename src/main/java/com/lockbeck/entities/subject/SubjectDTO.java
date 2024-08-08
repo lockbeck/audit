@@ -1,11 +1,13 @@
 package com.lockbeck.entities.subject;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class SubjectDTO {
     private Integer id;
     private String name;

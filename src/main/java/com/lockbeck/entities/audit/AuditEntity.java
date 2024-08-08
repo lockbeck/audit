@@ -26,9 +26,6 @@ public class AuditEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "subject_id")
-    private SubjectEntity subject;
 
     @Enumerated(EnumType.STRING)
     private AuditStatus status;
