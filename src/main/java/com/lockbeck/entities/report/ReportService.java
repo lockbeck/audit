@@ -61,6 +61,9 @@ public class ReportService {
     }
 
     public ReportDTO getReport(ReportEntity report) {
+        if (report==null) {
+            return null;
+        }
         return ReportDTO.builder()
                 .id(report.getId())
                 .number(report.getNumber())
