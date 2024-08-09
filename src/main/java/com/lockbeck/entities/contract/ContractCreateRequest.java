@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Setter
 public class ContractCreateRequest {
 
-    private LocalDate date;
+    private String date;
     private String number;
     private Double price;
     private Integer compNums;

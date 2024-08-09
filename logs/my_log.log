@@ -2895,3 +2895,7 @@ org.postgresql.util.PSQLException: ERROR: value too long for type character vary
 2024-08-08T15:35:09.287+05:00  WARN 1008 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
 2024-08-08T15:35:10.167+05:00  INFO 1008 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
 2024-08-08T15:35:10.185+05:00  INFO 1008 --- [main] com.lockbeck.AuditApplication            : Started AuditApplication in 8.592 seconds (process running for 9.245)
+2024-08-08T15:48:47.747+05:00  WARN 1008 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=7m12s304ms363µs500ns).
+2024-08-08T16:04:10.021+05:00  INFO 1008 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-08-08T16:04:10.098+05:00  INFO 1008 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-08-08T16:04:10.135+05:00  INFO 1008 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

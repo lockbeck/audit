@@ -8,10 +8,10 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class LetterCreateRequest {
-    private LocalDate date;
+    private String date;
     private String number;
 
-    private LocalDate entryDate;
+    private String entryDate;
     private String entryNumber;
 
     private Boolean isOurLetter;

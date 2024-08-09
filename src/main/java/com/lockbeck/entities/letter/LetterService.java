@@ -6,6 +6,7 @@ import com.lockbeck.entities.file.FileService;
 import com.lockbeck.entities.stuff.StuffService;
 import com.lockbeck.entities.subject.SubjectService;
 import com.lockbeck.exceptions.NotFoundException;
+import com.lockbeck.utils.LocalDateFormatter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +22,11 @@ public class LetterService {
     private final AuditorService auditorService;
     private final StuffService stuffService;
     private final SubjectService subjectService;
+    private final LocalDateFormatter localDateFormatter;
 
     public Response create(LetterCreateRequest request) {
         LetterEntity entity = new LetterEntity();
-        entity.setDate(request.getDate());
+        entity.setDate(localDateFormatter.getLocalDate(request.getDate()));
         entity.setNumber(request.getNumber());
         entity.setIsOurLetter(request.getIsOurLetter());
         entity.setSubject(subjectService.get(request.getSubjectId()));
@@ -33,7 +35,7 @@ public class LetterService {
             entity.setAuditor(auditorService.get(request.getAuditorId()));
         }else {
             entity.setStuff(stuffService.get(request.getStuffId()));
-            entity.setEntryDate(request.getEntryDate());
+            entity.setEntryDate(localDateFormatter.getLocalDate(request.getEntryDate()));
             entity.setEntryNumber(request.getEntryNumber());
         }
         repository.save(entity);
@@ -43,7 +45,7 @@ public class LetterService {
 
     public Response update(LetterUpdateRequest request) {
         LetterEntity entity = get(request.getId());
-        entity.setDate(request.getDate());
+        entity.setDate(localDateFormatter.getLocalDate(request.getDate()));
         entity.setNumber(request.getNumber());
         entity.setIsOurLetter(request.getIsOurLetter());
         entity.setSubject(subjectService.get(request.getSubjectId()));
@@ -52,7 +54,7 @@ public class LetterService {
             entity.setAuditor(auditorService.get(request.getAuditorId()));
         }else {
             entity.setStuff(stuffService.get(request.getStuffId()));
-            entity.setEntryDate(request.getEntryDate());
+            entity.setEntryDate(localDateFormatter.getLocalDate(request.getEntryDate()));
             entity.setEntryNumber(request.getEntryNumber());
         }
         repository.save(entity);
@@ -91,14 +93,14 @@ public class LetterService {
         LetterDTO dto= new LetterDTO();
         dto.setId(inLetter.getId());
         dto.setNumber(inLetter.getNumber());
-        dto.setDate(inLetter.getDate());
+        dto.setDate(localDateFormatter.getStringDate(inLetter.getDate()));
         dto.setIsOurLetter(inLetter.getIsOurLetter());
         dto.setSubject(subjectService.getSubject(inLetter.getSubject()));
         dto.setFile(fileService.getFileDto(inLetter.getFile()));
         if(inLetter.getIsOurLetter()){
             dto.setAuditor(auditorService.getAuditor(inLetter.getAuditor()));
         }else {
-            dto.setEntryDate(inLetter.getEntryDate());
+            dto.setEntryDate(localDateFormatter.getStringDate(inLetter.getEntryDate()));
             dto.setEntryNumber(inLetter.getEntryNumber());
             dto.setStuff(stuffService.getStuff(inLetter.getStuff()));
         }

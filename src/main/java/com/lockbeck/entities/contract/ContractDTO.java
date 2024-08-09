@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class ContractDTO {
 
     private Integer id;
-    private LocalDate date;
+    private String date;
     private String number;
     private Double price;
     private Integer compNums;

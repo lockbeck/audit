@@ -3,6 +3,7 @@ package com.lockbeck.entities.contract;
 import com.lockbeck.demo.Response;
 import com.lockbeck.entities.file.FileService;
 import com.lockbeck.exceptions.NotFoundException;
+import com.lockbeck.utils.LocalDateFormatter;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,12 @@ public class ContractService {
     private final ContractRepository repository;
     private final FileService fileService;
     private final ModelMapper modelMapper;
+    private final LocalDateFormatter localDateFormatter;
 
     public Response create(ContractCreateRequest request) {
 
         ContractEntity entity = new ContractEntity();
-        entity.setDate(request.getDate());
+        entity.setDate(localDateFormatter.getLocalDate(request.getDate()));
         entity.setNumber(request.getNumber());
         entity.setPrice(request.getPrice());
         entity.setCompNums(request.getCompNums());
@@ -41,17 +43,14 @@ public class ContractService {
     public Response update(ContractUpdateRequest request) {
 
         ContractEntity entity = get(request.getId());
-
-        entity.setDate(request.getDate());
+        entity.setDate(localDateFormatter.getLocalDate(request.getDate()));
         entity.setNumber(request.getNumber());
         entity.setPrice(request.getPrice());
         entity.setCompNums(request.getCompNums());
         entity.setServerNums(request.getServerNums());
         entity.setObjectAddress(request.getObjectAddress());
-
         // Manually set the FileEntity
         entity.setFile(fileService.get(request.getFileId()));
-
         // Save contractEntity and return response
         repository.save(entity);
         return new Response(200,"success");
@@ -79,7 +78,7 @@ public class ContractService {
     public ContractDTO getContract(ContractEntity contract) {
         return ContractDTO.builder()
                 .id(contract.getId())
-                .date(contract.getDate())
+                .date(localDateFormatter.getStringDate(contract.getDate()))
                 .number(contract.getNumber())
                 .price(contract.getPrice())
                 .compNums(contract.getCompNums())

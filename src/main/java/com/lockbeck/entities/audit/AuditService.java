@@ -8,6 +8,7 @@ import com.lockbeck.entities.file.FileService;
 import com.lockbeck.entities.letter.LetterService;
 import com.lockbeck.entities.report.ReportService;
 import com.lockbeck.exceptions.NotFoundException;
+import com.lockbeck.utils.LocalDateFormatter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ public class AuditService {
     private final AuditorService auditorService;
     private final ReportService reportService;
     private final FileService fileService;
+    private final LocalDateFormatter localDateFormatter;
 
     public Response create(AuditCreateRequest request) {
         AuditEntity entity = new AuditEntity();
@@ -46,12 +48,12 @@ public class AuditService {
 
             case CONTRACTED:
                 audit.setHalfPayment(request.getHalfPayment());
-                audit.setHalfPaymentDate(request.getHalfPaymentDate());
+                audit.setHalfPaymentDate(localDateFormatter.getLocalDate(request.getHalfPaymentDate()));
                 audit.setStatus(AuditStatus.HALF_PAID);
                 break;
 
             case HALF_PAID:
-                audit.setAuditStartDate(request.getAuditStartDate());
+                audit.setAuditStartDate(localDateFormatter.getLocalDate(request.getAuditStartDate()));
                 audit.setLeader(auditorService.get(request.getLeaderId()));
                 Set<AuditorEntity> set = new HashSet<>();
                 request.getAuditorIds().forEach(integer -> {
@@ -64,7 +66,7 @@ public class AuditService {
                 break;
 
             case STARTED:
-                audit.setAuditFinishDate(request.getAuditFinishDate());
+                audit.setAuditFinishDate(localDateFormatter.getLocalDate(request.getAuditFinishDate()));
                 audit.setStatus(AuditStatus.REPORTING);
                 break;
 
@@ -75,8 +77,7 @@ public class AuditService {
 
             case WAITING_REST_PAYMENT:
                 audit.setRestPayment(request.getRestPayment());
-                audit.setRestPaymentDate(request.getRestPaymentDate());
-                audit.setAuditFinishDate(request.getAuditFinishDate());
+                audit.setRestPaymentDate(localDateFormatter.getLocalDate(request.getRestPaymentDate()));
                 audit.setStatus(AuditStatus.FINISHED);
                 break;
 
@@ -127,16 +128,16 @@ public class AuditService {
         dto.setContract(contractService.getContract(entity.getContract()));
 
         dto.setHalfPayment(entity.getHalfPayment());
-        dto.setHalfPaymentDate(entity.getHalfPaymentDate());
-        dto.setAuditStartDate(entity.getAuditStartDate());
+        dto.setHalfPaymentDate(localDateFormatter.getStringDate(entity.getHalfPaymentDate()));
+        dto.setAuditStartDate(localDateFormatter.getStringDate(entity.getAuditStartDate()));
 
         dto.setLeader(auditorService.getAuditor(entity.getLeader()));
         dto.setAuditors(auditorService.getAuditors(entity.getAuditors()));
         //listdoc
         dto.setListDoc(fileService.getFileDto(entity.getListDoc()));
-        dto.setAuditFinishDate(entity.getAuditFinishDate());
+        dto.setAuditFinishDate(localDateFormatter.getStringDate(entity.getAuditFinishDate()));
         dto.setRestPayment(entity.getRestPayment());
-        dto.setRestPaymentDate(entity.getRestPaymentDate());
+        dto.setRestPaymentDate(localDateFormatter.getStringDate(entity.getRestPaymentDate()));
 
         dto.setReport(reportService.getReport(entity.getReport()));
         return dto;

@@ -14,16 +14,16 @@ public class AuditUpdateRequest {
     private Integer contractId;
 
     private Double halfPayment;
-    private LocalDate halfPaymentDate;
+    private String halfPaymentDate;
 
-    private LocalDate auditStartDate;
+    private String auditStartDate;
 
     private Integer leaderId;
     private List<Integer> auditorIds;
     private String listDocId;
 
-    private LocalDate auditFinishDate;
+    private String auditFinishDate;
     private Double restPayment;
-    private LocalDate restPaymentDate;
+    private String restPaymentDate;
     private Integer reportId;
 }

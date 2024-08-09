@@ -9,10 +9,10 @@ import java.time.LocalDate;
 @Setter
 public class LetterUpdateRequest {
     private Integer id;
-    private LocalDate date;
+    private String date;
     private String number;
 
-    private LocalDate entryDate;
+    private String entryDate;
     private String entryNumber;
 
     private Boolean isOurLetter;

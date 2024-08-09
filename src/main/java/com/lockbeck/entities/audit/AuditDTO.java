@@ -23,16 +23,16 @@ public class AuditDTO {
     private ContractDTO contract;
 
     private Double halfPayment;
-    private LocalDate halfPaymentDate;
-    private LocalDate auditStartDate;
+    private String halfPaymentDate;
+    private String auditStartDate;
 
     private AuditorDTO leader;
     private List<AuditorDTO> auditors;
 
     private FileDTO listDoc;
-    private LocalDate auditFinishDate;
+    private String auditFinishDate;
     private Double restPayment;
-    private LocalDate restPaymentDate;
+    private String restPaymentDate;
 
     private ReportDTO report;
 }
