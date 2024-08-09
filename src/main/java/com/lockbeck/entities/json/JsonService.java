@@ -28,6 +28,7 @@ public class JsonService {
     private final AuditService auditService;
 
     public void create(JsonCreateRequest request){
+
         JsonEntity entity = new JsonEntity();
         entity.setIpAddress(request.getIpAddress());
         entity.setRemoteAccess(request.getRemoteAccess());

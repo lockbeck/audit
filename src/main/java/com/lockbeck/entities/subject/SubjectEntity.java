@@ -3,6 +3,8 @@ package com.lockbeck.entities.subject;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 
 @Getter
 @Setter
@@ -15,6 +17,8 @@ public class SubjectEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    private UUID uuid;
     private String name;
     private String address;
     private String phone;
