@@ -76,6 +76,9 @@ public class ContractService {
     }
 
     public ContractDTO getContract(ContractEntity contract) {
+        if (contract==null) {
+            return null;
+        }
         return ContractDTO.builder()
                 .id(contract.getId())
                 .date(localDateFormatter.getStringDate(contract.getDate()))

@@ -90,6 +90,9 @@ public class LetterService {
     }
 
     public LetterDTO getLetter(LetterEntity inLetter) {
+        if (inLetter==null) {
+            return null;
+        }
         LetterDTO dto= new LetterDTO();
         dto.setId(inLetter.getId());
         dto.setNumber(inLetter.getNumber());

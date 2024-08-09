@@ -118,6 +118,7 @@ public class AuditService {
     }
 
     private AuditDTO getAudit(AuditEntity entity) {
+
         AuditDTO dto = new AuditDTO();
         dto.setId(entity.getId());
         dto.setSubject(entity.getInLetter().getSubject().getName());

@@ -62,6 +62,9 @@ public class AuditorService {
     }
 
     public List<AuditorDTO> getAuditors(Set<AuditorEntity> auditors) {
+        if (auditors==null||auditors.isEmpty()) {
+            return null;
+        }
         List<AuditorDTO> list = new ArrayList<>();
         auditors.forEach(auditorEntity -> list.add(getAuditor(auditorEntity)));
         return list;
@@ -69,6 +72,9 @@ public class AuditorService {
     }
 
     public AuditorDTO getAuditor(AuditorEntity auditor) {
+        if (auditor==null) {
+            return null;
+        }
         return modelMapper.map(auditor, AuditorDTO.class);
     }
 

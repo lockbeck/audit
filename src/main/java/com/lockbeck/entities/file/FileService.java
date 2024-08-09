@@ -141,6 +141,9 @@ public class FileService {
 
 
     public FileDTO getFileDto(FileEntity file) {
+        if (file==null) {
+            return null;
+        }
         return FileDTO.builder()
                 .fileId(file.getId())
                 .downloadUrl(file.getDownloadUrl()+file.getId())

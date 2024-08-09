@@ -14,35 +14,21 @@ public class LocalDateFormatter {
     public LocalDate getLocalDate(String date) {
 
 
-        // Parse the date string into an Instant
-        Instant instant = Instant.parse(date);
-
-        // Convert the Instant to a LocalDate
-        LocalDate localDate = instant.atZone(ZoneId.of("UTC")).toLocalDate();
-
-        // Print the LocalDate
-
-        return localDate;
-    }
-
-    public LocalDate getLocalDateIfNull(String date) {
-
         if (date != null) {
 
             // Parse the date string into an Instant
             Instant instant = Instant.parse(date);
 
             // Convert the Instant to a LocalDate
-            LocalDate localDate = instant.atZone(ZoneId.of("UTC")).toLocalDate();
+            return  instant.atZone(ZoneId.of("UTC")).toLocalDate();
 
-            // Print the LocalDate
 
-            return localDate;
         }else {
             return null;
         }
-
     }
+
+
 
     public LocalDate getLocalDateForUpdates(String date) {
         // Define DateTimeFormatter for both formats
@@ -59,7 +45,7 @@ public class LocalDateFormatter {
                 return LocalDate.parse(date, formatter2);
             } catch (DateTimeParseException e2) {
                 // If parsing fails with both formatters, throw an exception or return null, depending on your requirements
-                throw new IllegalArgumentException("Unsupported date format: " + date);
+                throw new IllegalArgumentException("Unsupported date format mall: " + date);
                 // Alternatively, you could return null if you prefer
                 // return null;
             }
@@ -68,15 +54,21 @@ public class LocalDateFormatter {
 
     public String getStringDate(LocalDate date) {
 
+        if (date!=null) {
 
-        // Create a LocalDateTime object by combining the LocalDate with midnight time
-        LocalDateTime localDateTime = date.atStartOfDay();
 
-        // Define the formatter to format the output string
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            // Create a LocalDateTime object by combining the LocalDate with midnight time
+            LocalDateTime localDateTime = date.atStartOfDay();
 
-        // Format the LocalDateTime object into a string
-        String formattedDate = localDateTime.format(formatter);
-        return formattedDate;
+            // Define the formatter to format the output string
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+            // Format the LocalDateTime object into a string
+            String formattedDate = localDateTime.format(formatter);
+            return formattedDate;
+        }
+        else {
+            return null;
+        }
     }
 }
