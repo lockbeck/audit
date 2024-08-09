@@ -9,9 +9,13 @@ import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowserServic
 import com.lockbeck.entities.json.usb.UsbRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -63,5 +67,29 @@ public class JsonService {
             socialAppsInBrowserRepository.saveAll(jsonEntity.getSocialAppsInBrowser());
 
         }
+    }
+
+    public void createWordReport() throws IOException {
+        XWPFDocument document = new XWPFDocument();
+
+        // 4.3.1 bo'limi uchun default matn
+        XWPFParagraph paragraph1 = document.createParagraph();
+        XWPFRun run1 = paragraph1.createRun();
+        run1.setText("4.3.1. 100 ishchi kompyuterlarining axborot xavfsizligini ta’minlashning dasturiy-texnik ko‘rsatkichlarini tekshiruvi natijalari");
+
+        // JSON ma'lumotlarini kiritish
+        List<JsonEntity> statistics = jsonRepository.findAll();
+        for (JsonEntity statistic : statistics) {
+            XWPFParagraph paragraph = document.createParagraph();
+            XWPFRun run = paragraph.createRun();
+            run.setText(statistic.getName() + ": " + statistic.getMac());
+        }
+
+        // Hujjatni saqlash
+        try (FileOutputStream out = new FileOutputStream("report.docx")) {
+            document.write(out);
+        }
+
+        document.close();
     }
 }
