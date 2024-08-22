@@ -80,7 +80,8 @@ public class JsonService {
         XWPFRun run1 = paragraph1.createRun();
         run1.setText("4.3.1. 100 ishchi kompyuterlarining axborot xavfsizligini ta’minlashning dasturiy-texnik ko‘rsatkichlarini tekshiruvi natijalari");
         run1.setBold(true);
-        run1.setItalic(true);
+        run1.setFontSize(20);
+
 
 
         // JSON ma'lumotlarini kiritish
