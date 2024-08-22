@@ -29,8 +29,8 @@ public class AuditService {
         AuditEntity entity = new AuditEntity();
         entity.setInLetter(letterService.get(request.getInLetterId()));
         entity.setStatus(AuditStatus.REQUESTED);
-        repository.save(entity);
-        return new Response(200, "audit yaratildi" );
+        AuditEntity save = repository.save(entity);
+        return new Response(200, "audit yaratildi" ,save.getId());
     }
 
     public Response update(AuditUpdateRequest request) {
@@ -85,9 +85,9 @@ public class AuditService {
                 audit.setStatus(AuditStatus.FINISHED);
                 break;
         }
-        repository.save(audit);
+        AuditEntity save = repository.save(audit);
 
-        return new Response(200, "audit o'zgartirildi");
+        return new Response(200, "audit o'zgartirildi",save.getId());
     }
 
     public Response list() {

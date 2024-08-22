@@ -12,11 +12,14 @@ import lombok.RequiredArgsConstructor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Service
@@ -69,27 +72,41 @@ public class JsonService {
         }
     }
 
-    public void createWordReport() throws IOException {
+    public Resource createWordReport() throws IOException {
         XWPFDocument document = new XWPFDocument();
 
         // 4.3.1 bo'limi uchun default matn
         XWPFParagraph paragraph1 = document.createParagraph();
         XWPFRun run1 = paragraph1.createRun();
         run1.setText("4.3.1. 100 ishchi kompyuterlarining axborot xavfsizligini ta’minlashning dasturiy-texnik ko‘rsatkichlarini tekshiruvi natijalari");
+        run1.setBold(true);
+        run1.setItalic(true);
+
 
         // JSON ma'lumotlarini kiritish
-        List<JsonEntity> statistics = jsonRepository.findAll();
+        /*List<JsonEntity> statistics = jsonRepository.findAll();
         for (JsonEntity statistic : statistics) {
             XWPFParagraph paragraph = document.createParagraph();
             XWPFRun run = paragraph.createRun();
             run.setText(statistic.getName() + ": " + statistic.getMac());
+        }*/
+
+        // Hujjatni "uploads" papkasiga saqlash
+        Path uploadsDir = Paths.get("reports");
+        if (!uploadsDir.toFile().exists()) {
+            uploadsDir.toFile().mkdirs(); // Papkani yaratish, agar mavjud bo'lmasa
         }
 
-        // Hujjatni saqlash
-        try (FileOutputStream out = new FileOutputStream("report.docx")) {
+        String fileName = "report.docx";
+        Path filePath = uploadsDir.resolve(fileName);
+
+        try (FileOutputStream out = new FileOutputStream(filePath.toFile())) {
             document.write(out);
         }
 
         document.close();
+
+        // FileSystemResource dan foydalanib, resursni qaytarish
+        return new FileSystemResource(filePath.toFile());
     }
 }

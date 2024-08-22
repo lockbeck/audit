@@ -34,9 +34,9 @@ public class ContractService {
         entity.setFile(fileService.get(request.getFileId()));
 
         // Save contractEntity and return response
-        repository.save(entity);
+        ContractEntity save = repository.save(entity);
 
-        return new Response(200,"Shartnoma saqlandi");
+        return new Response(200,"Shartnoma saqlandi",save.getId());
 
     }
 
@@ -52,8 +52,8 @@ public class ContractService {
         // Manually set the FileEntity
         entity.setFile(fileService.get(request.getFileId()));
         // Save contractEntity and return response
-        repository.save(entity);
-        return new Response(200,"success");
+        ContractEntity save = repository.save(entity);
+        return new Response(200,"success",save.getId());
 
     }
 

@@ -26,9 +26,9 @@ public class ReportService {
         report.setLetter(letterService.get(request.getLetterId()));
         report.setReportFile(fileService.getFile(request.getReportFileId()));
 
-        repository.save(report);
+        ReportEntity save = repository.save(report);
 
-        return new Response(200,"Saqlandi");
+        return new Response(200,"Saqlandi",save.getId());
     }
 
     public Response update(ReportUpdateRequest request){
@@ -40,9 +40,9 @@ public class ReportService {
         report.setLetter(letterService.get(request.getLetterId()));
         report.setReportFile(fileService.getFile(request.getReportFileId()));
 
-        repository.save(report);
+        ReportEntity save = repository.save(report);
 
-        return  new Response(200,"Hisobot o'zgartirildi");
+        return  new Response(200,"Hisobot o'zgartirildi",save.getId());
     }
 
     public Response list() {

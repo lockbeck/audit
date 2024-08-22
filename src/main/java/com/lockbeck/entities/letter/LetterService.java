@@ -38,8 +38,8 @@ public class LetterService {
             entity.setEntryDate(localDateFormatter.getLocalDate(request.getEntryDate()));
             entity.setEntryNumber(request.getEntryNumber());
         }
-        repository.save(entity);
-        return new Response(200,"success");
+        LetterEntity save = repository.save(entity);
+        return new Response(200,"success",save.getId());
 
     }
 
@@ -57,8 +57,8 @@ public class LetterService {
             entity.setEntryDate(localDateFormatter.getLocalDate(request.getEntryDate()));
             entity.setEntryNumber(request.getEntryNumber());
         }
-        repository.save(entity);
-        return new Response(200,"success");
+        LetterEntity save = repository.save(entity);
+        return new Response(200,"success",save.getId());
 
     }
 

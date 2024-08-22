@@ -18,8 +18,8 @@ public class SubjectService {
     public Response create(SubjectCreateRequest request) {
 
         SubjectEntity entity = modelMapper.map(request, SubjectEntity.class);
-        repository.save(entity);
-        return new Response();
+        SubjectEntity save = repository.save(entity);
+        return new Response(202,"success",save.getId());
     }
 
     public Response update(SubjectUpdateDTO request) {
@@ -28,8 +28,8 @@ public class SubjectService {
         subject.setAddress(request.getAddress());
         subject.setEmail(request.getEmail());
         subject.setPhone(request.getPhone());
-        repository.save(subject);
-        return new Response(200,"Success");
+        SubjectEntity save = repository.save(subject);
+        return new Response(200,"Success",save.getId());
 
     }
 

@@ -17,9 +17,9 @@ public class StuffService {
     private final ModelMapper modelMapper;
 
     public Response create(StuffCreateRequest request) {
-        repository.save(modelMapper.map(request, StuffEntity.class));
+        StuffEntity save = repository.save(modelMapper.map(request, StuffEntity.class));
 
-        return new Response();
+        return new Response(202,"success",save.getId());
     }
 
     public Response update(StuffUpdateDTO dto){
@@ -27,8 +27,8 @@ public class StuffService {
         stuff.setName(dto.getName());
         stuff.setEmail(dto.getEmail());
         stuff.setPhone(dto.getPhone());
-        repository.save(stuff);
-        return new Response(200,"success");
+        StuffEntity save = repository.save(stuff);
+        return new Response(200,"success",save.getId());
 
     }
 

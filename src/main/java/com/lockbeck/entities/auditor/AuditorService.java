@@ -20,8 +20,8 @@ public class AuditorService {
     private final ModelMapper modelMapper;
 
     public Response create(AuditorCreateRequest request) {
-        repository.save(modelMapper.map(request, AuditorEntity.class));
-        return new Response();
+        AuditorEntity save = repository.save(modelMapper.map(request, AuditorEntity.class));
+        return new Response(202,"success",save.getId());
     }
 
     public Response update(AuditorUpdateRequest request) {
@@ -29,9 +29,9 @@ public class AuditorService {
         auditor.setName(request.getName());
         auditor.setEmail(request.getEmail());
         auditor.setPhone(request.getPhone());
-        repository.save(auditor);
+        AuditorEntity save = repository.save(auditor);
 
-        return new Response();
+        return new Response(202,"success",save.getId());
     }
 
     public Response list() {
