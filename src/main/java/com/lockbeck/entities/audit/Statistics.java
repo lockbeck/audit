@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class Statistics {
-    private Integer completed;
-    private Integer uncompleted;
+    private Integer requested;
+    private Integer process;
+    private Integer finished;
 }

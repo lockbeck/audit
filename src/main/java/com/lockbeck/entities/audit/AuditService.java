@@ -145,18 +145,21 @@ public class AuditService {
     }
 
     public Response statistics() {
-        int completed = 0;
-        int uncompleted = 0;
+        int requested = 0;
+        int process = 0;
+        int finished = 0;
         for (AuditEntity auditEntity : repository.findAll()) {
-            if (auditEntity.getStatus().equals(AuditStatus.FINISHED)) {
-                completed++;
+            if (auditEntity.getStatus().equals(AuditStatus.REQUESTED)) {
+                requested++;
+            }else if (auditEntity.getStatus().equals(AuditStatus.FINISHED)) {
+                finished++;
             }
             else {
-                uncompleted++;
+                process++;
             }
         }
 
-        return new Response(200,"success",new Statistics(completed,uncompleted));
+        return new Response(200,"success",new Statistics(requested,process,finished));
 
     }
 }
