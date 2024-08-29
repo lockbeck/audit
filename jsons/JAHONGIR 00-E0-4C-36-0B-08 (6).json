@@ -194,7 +194,7 @@
     "Microsoft Visual Studio Code (User)",
     "Microsoft ASP.NET Core 8.0.5 Shared Framework (x86)"
   ],
-  "UPS": false,
+  "UPS": true,
   "PLOMBA": false,
   "SocialAppsInDesktop": ["Telegram Desktop"],
   "SocialAppsInBrowser": [

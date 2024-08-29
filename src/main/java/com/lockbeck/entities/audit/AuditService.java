@@ -143,4 +143,20 @@ public class AuditService {
         dto.setReport(reportService.getReport(entity.getReport()));
         return dto;
     }
+
+    public Response statistics() {
+        int completed = 0;
+        int uncompleted = 0;
+        for (AuditEntity auditEntity : repository.findAll()) {
+            if (auditEntity.getStatus().equals(AuditStatus.FINISHED)) {
+                completed++;
+            }
+            else {
+                uncompleted++;
+            }
+        }
+
+        return new Response(200,"success",new Statistics(completed,uncompleted));
+
+    }
 }

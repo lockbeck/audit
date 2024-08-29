@@ -34,6 +34,10 @@ public class AuditController {
         return ResponseEntity.ok(service.getById(id));
     }
 
+    @GetMapping("/statistics")
+    public ResponseEntity<Response> statistics(){
+        return ResponseEntity.ok(service.statistics());
+    }
 
 
 

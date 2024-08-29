@@ -41,7 +41,7 @@ upload:
   folder: uploads
 
 server:
-  port: 8080
+  port: 4280
 file:
   dwnUrl: /file/downloadFile/
 

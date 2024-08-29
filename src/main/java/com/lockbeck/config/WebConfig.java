@@ -15,11 +15,9 @@ public class WebConfig  {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins(
-                                "http://localhost:80",
-                                "http://10.10.40.60:80",
-                                "http://10.10.40.60",
-                                "http://localhost:4200",
-                                "http://10.10.40.60:4200")
+                                "http://10.10.40.60:4200",
+                                "http://localhost:4200"
+                        )
                         .allowCredentials(true)
                         .allowedMethods(HttpMethod.GET.name(),
                                 HttpMethod.POST.name(),
