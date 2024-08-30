@@ -17,7 +17,7 @@ public class LetterCreateRequest {
     private Boolean isOurLetter;
 
     private Integer stuffId;
-    private Integer subjectId;
+    private String subjectId;
     private Integer auditorId;
 
     private String fileId;

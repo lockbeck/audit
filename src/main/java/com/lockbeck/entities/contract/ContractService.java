@@ -98,4 +98,10 @@ public class ContractService {
         }
         return byId.get();
     }
+
+    public void delete(ContractEntity contract) {
+        fileService.delete(contract.getFile());
+
+        repository.delete(contract);
+    }
 }

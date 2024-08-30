@@ -86,4 +86,10 @@ public class AuditorService {
         return byId.get();
 
     }
+
+    public Response delete(Integer id) {
+        AuditorEntity auditorEntity = get(id);
+        repository.delete(auditorEntity);
+        return new Response(202,"success");
+    }
 }

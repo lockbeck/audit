@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class SubjectDTO {
-    private Integer id;
+    private String id;
     private String name;
     private String address;
     private String phone;

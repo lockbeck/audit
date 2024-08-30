@@ -81,4 +81,9 @@ public class ReportService {
         }
         return byId.get();
     }
+
+    public void delete(ReportEntity report) {
+        fileService.delete(report.getReportFile());
+        repository.delete(report);
+    }
 }

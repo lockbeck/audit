@@ -57,4 +57,9 @@ public class StuffService {
         return byId.get();
     }
 
+    public Response delete(Integer id) {
+        StuffEntity stuffEntity = get(id);
+        repository.delete(stuffEntity);
+        return new Response(200,"success");
+    }
 }

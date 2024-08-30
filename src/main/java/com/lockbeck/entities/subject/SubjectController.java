@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/subject")
 @RequiredArgsConstructor
@@ -25,11 +27,18 @@ public class SubjectController {
 
 
     @GetMapping("/list")
-    public ResponseEntity<Response> list(){
+    public ResponseEntity<Response> list() throws IOException {
+//        service.saveSubjectsFromJson();
         return ResponseEntity.ok(service.list());
     }
     @GetMapping("/get/{id}")
-    public ResponseEntity<Response> get(@PathVariable Integer id){
+    public ResponseEntity<Response> get(@PathVariable String id){
+
         return ResponseEntity.ok(service.getById(id));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") String id){
+        return ResponseEntity.ok(service.delete(id));
     }
 }

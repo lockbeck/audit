@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -149,5 +150,19 @@ public class FileService {
                 .downloadUrl(file.getDownloadUrl()+file.getId())
                 .originalName(file.getOriginalName())
                 .build();
+    }
+
+    public void delete(FileEntity fileEntity) {
+        File file = new File(fileEntity.getPath() +"/"+ fileEntity.getOriginalName()+fileEntity.getExtension());
+        if (file.exists()) {
+            if (file.delete()) {
+                System.out.println("File deleted successfully");
+            } else {
+                System.out.println("Failed to delete the file");
+            }
+        } else {
+            System.out.println("File not found");
+        }
+        fileRepository.delete(fileEntity);
     }
 }

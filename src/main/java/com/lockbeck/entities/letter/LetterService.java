@@ -109,4 +109,12 @@ public class LetterService {
         }
         return dto;
     }
+
+    public void delete(LetterEntity inLetter) {
+        inLetter.setAuditor(null);
+        inLetter.setStuff(null);
+        inLetter.setSubject(null);
+        fileService.delete(inLetter.getFile());
+        repository.delete(inLetter);
+    }
 }

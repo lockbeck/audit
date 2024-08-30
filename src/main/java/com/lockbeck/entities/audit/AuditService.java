@@ -162,4 +162,26 @@ public class AuditService {
         return new Response(200,"success",new Statistics(requested,process,finished));
 
     }
+
+    public Response delete(Integer id) {
+        AuditEntity auditEntity = get(id);
+        letterService.delete(auditEntity.getInLetter());
+        if(auditEntity.getOutLetter() != null) {
+            letterService.delete(auditEntity.getOutLetter());
+        }
+        if(auditEntity.getContract() != null) {
+            contractService.delete(auditEntity.getContract());
+        }
+        if(auditEntity.getReport() != null) {
+            reportService.delete(auditEntity.getReport());
+        }
+
+        if(auditEntity.getListDoc() != null) {
+            fileService.delete(auditEntity.getListDoc());
+        }
+        auditEntity.setLeader(null);
+
+        repository.delete(auditEntity);
+        return new Response(200,"success");
+    }
 }

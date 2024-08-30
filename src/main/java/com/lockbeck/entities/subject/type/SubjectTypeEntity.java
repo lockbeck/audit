@@ -1,8 +1,6 @@
 package com.lockbeck.entities.subject.type;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.validator.constraints.UUID;
 
@@ -15,6 +13,7 @@ import org.hibernate.validator.constraints.UUID;
 @Builder
 public class SubjectTypeEntity {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String name;
 }

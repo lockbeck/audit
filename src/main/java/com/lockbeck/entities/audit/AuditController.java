@@ -23,6 +23,10 @@ public class AuditController {
     public ResponseEntity<Response> update(@RequestBody AuditUpdateRequest request){
         return ResponseEntity.ok(service.update(request));
     }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Integer id){
+        return ResponseEntity.ok(service.delete(id));
+    }
 
     @GetMapping("/list")
     public ResponseEntity<Response> list(){

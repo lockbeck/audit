@@ -4,11 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
-public class SubjectUpdateDTO {
+
+public class SubjectTest {
     private String id;
     private String name;
-    private String address;
-    private String phone;
-    private String email;
+    private String type;
+    private String typeId;
 }

@@ -39,4 +39,9 @@ public class AuditorController {
     public ResponseEntity<Response> get(@PathVariable Integer id){
         return ResponseEntity.ok(service.getById(id));
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Integer id){
+        return ResponseEntity.ok(service.delete(id));
+    }
 }

@@ -18,7 +18,7 @@ public class LetterUpdateRequest {
     private Boolean isOurLetter;
 
     private Integer stuffId;
-    private Integer subjectId;
+    private String subjectId;
     private Integer auditorId;
 
     private String fileId;

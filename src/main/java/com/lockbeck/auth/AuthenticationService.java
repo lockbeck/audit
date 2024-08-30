@@ -45,6 +45,7 @@ public class AuthenticationService {
 
 
 
+
         var jwtToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
