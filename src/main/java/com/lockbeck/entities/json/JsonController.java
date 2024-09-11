@@ -54,7 +54,7 @@ public class JsonController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping("/upload-json/{auditId}")
+    @PostMapping("/upload/{auditId}")
     public String uploadJsonFiles(@RequestParam("files") MultipartFile[] files, @PathVariable("auditId")Integer auditId) throws IOException {
         List<File> jsonFiles = Arrays.stream(files)
                 .map(file -> {

@@ -1,5 +1,6 @@
 package com.lockbeck.entities.file;
 
+import com.lockbeck.demo.Response;
 import com.lockbeck.exceptions.BadRequestException;
 import com.lockbeck.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class FileService {
         return byId.get();
     }
 
-    public FileEntity save(MultipartFile multipartFile) throws IOException {
+    public Response save(MultipartFile multipartFile) throws IOException {
         if (isHazardousFile(multipartFile.getOriginalFilename())) {
             throw new BadRequestException("Ushbu file zararli bolishi mumkin iltimos pdf jpeg jpg yoki png file yuklang: " + multipartFile.getName());
         }
@@ -63,7 +64,13 @@ public class FileService {
             throw new IOException("Could not save file: " + fileName, ioe);
         }
 
-        return file;
+        FileUploadResponse fileUploadResponse = new FileUploadResponse();
+        fileUploadResponse.setId(file.getId());
+        fileUploadResponse.setFileName(file.getOriginalName());
+        fileUploadResponse.setDownloadUri("/file/downloadFile/"+file.getId());
+
+
+        return new Response(200,"success",fileUploadResponse);
 
 //        FileUploadResponse response = new FileUploadResponse();
 //        response.setId(fileCode);

@@ -2,6 +2,7 @@ package com.lockbeck.entities.file;
 
 
 import com.lockbeck.config.JwtService;
+import com.lockbeck.demo.Response;
 import com.lockbeck.entities.user.UserEntity;
 import com.lockbeck.entities.user.UserService;
 import com.lockbeck.exceptions.BadRequestException;
@@ -31,17 +32,15 @@ FileController {
     @PostMapping("/uploadFile")
     @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
     @Hidden
-    public ResponseEntity<FileUploadResponse> uploadFile(
+    public ResponseEntity<Response> uploadFile(
             @RequestParam("file") MultipartFile multipartFile)
             throws IOException {
 
-        FileEntity file = fileService.save(multipartFile);
-        FileUploadResponse fileUploadResponse = new FileUploadResponse();
-        fileUploadResponse.setId(file.getId());
-        fileUploadResponse.setFileName(file.getOriginalName());
-        fileUploadResponse.setDownloadUri("/api/v1/file/downloadFile/"+file.getId());
 
-        return  ResponseEntity.ok(fileUploadResponse);
+
+
+
+        return  ResponseEntity.ok(fileService.save(multipartFile));
     }
 
     @GetMapping("/downloadFile/{fileCode}")
