@@ -1,7 +1,5 @@
 package com.lockbeck.entities.json;
 
-import com.lockbeck.config.JwtService;
-import com.lockbeck.entities.user.UserService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,7 +31,7 @@ public class JsonController {
 
     public JsonController(JsonService jsonService) {
         this.jsonService = jsonService;
-        
+
     }
 
     @PostMapping("/upload")
