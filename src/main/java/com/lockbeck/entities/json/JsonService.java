@@ -33,8 +33,6 @@ import java.util.zip.ZipOutputStream;
 @RequiredArgsConstructor
 public class JsonService {
     private final JsonRepository jsonRepository;
-    private final AntivirusService antivirusService;
-    private final SocialAppsInBrowserService socialAppsInBrowserService;
     private final ObjectMapper objectMapper;
     private final AntivirusRepository antivirusRepository;
     private final UsbRepository usbRepository;
