@@ -1,6 +1,8 @@
 package com.lockbeck.entities.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lockbeck.demo.Response;
+import com.lockbeck.entities.audit.AuditEntity;
 import com.lockbeck.entities.audit.AuditService;
 import com.lockbeck.entities.json.antivirus.AntivirusRepository;
 import com.lockbeck.entities.json.antivirus.AntivirusService;
@@ -18,11 +20,14 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.math.BigInteger;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Service
 @RequiredArgsConstructor
@@ -64,22 +69,50 @@ public class JsonService {
     }*/
 
     @Transactional
-    public void processJsonFiles(List<File> jsonFiles, Integer auditId) throws IOException {
-        for (File jsonFile : jsonFiles) {
-            JsonEntity jsonEntity = objectMapper.readValue(jsonFile, JsonEntity.class);
-            jsonEntity.setAudit(auditService.get(auditId));
-            jsonRepository.save(jsonEntity);
-            antivirusRepository.saveAll(jsonEntity.getAntivirus());
-            usbRepository.saveAll(jsonEntity.getUsb());
-            socialAppsInBrowserRepository.saveAll(jsonEntity.getSocialAppsInBrowser());
+    public Response processJsonFiles(List<File> jsonFiles, Integer auditId) throws IOException {
+        AuditEntity auditEntity = auditService.get(auditId);
+        String name = auditEntity.getInLetter().getSubject().getName();
+        File zipFile = Files.createTempFile(name+"_ishchi_stansiyalri" , ".zip").toFile();
 
+        try (FileOutputStream fos = new FileOutputStream(zipFile);
+             ZipOutputStream zipOut = new ZipOutputStream(fos)) {
+
+            for (File jsonFile : jsonFiles) {
+                try (FileInputStream fis = new FileInputStream(jsonFile)) {
+                    ZipEntry zipEntry = new ZipEntry(jsonFile.getName());
+                    zipOut.putNextEntry(zipEntry);
+
+                    byte[] bytes = new byte[1024];
+                    int length;
+                    while ((length = fis.read(bytes)) >= 0) {
+                        zipOut.write(bytes, 0, length);
+                    }
+
+                    zipOut.closeEntry();
+                }
+            }
+        }catch (IOException e) {
+            System.out.println("saqlanmadi");
         }
+        for (File jsonFile : jsonFiles) {
+
+            JsonEntity jsonEntity = objectMapper.readValue(jsonFile, JsonEntity.class);
+            jsonEntity.setAudit(auditEntity);
+            if (jsonRepository.findByAuditIdAndMac(auditId, jsonEntity.getMac()).isEmpty()) {
+
+                jsonRepository.save(jsonEntity);
+                antivirusRepository.saveAll(jsonEntity.getAntivirus());
+                usbRepository.saveAll(jsonEntity.getUsb());
+                socialAppsInBrowserRepository.saveAll(jsonEntity.getSocialAppsInBrowser());
+            }
+        }
+        return new Response(200, "success");
     }
 
 
-    public Resource createWordReport() throws IOException {
+    public Resource createWordReport(Integer auditId) throws IOException {
 
-        List<JsonEntity> all = jsonRepository.findAll();
+        List<JsonEntity> all = jsonRepository.findAllByAuditId(auditId);
         double total = all.size();
 
         double hasRemoteAccess = 0;
@@ -540,15 +573,15 @@ public class JsonService {
     }
 
     private static void paragraph(XWPFDocument document, String text, boolean bold, int space, String color, boolean italic) {
-        XWPFParagraph bigParagraph1 = document.createParagraph();
-        XWPFRun run1_1 = bigParagraph1.createRun();
-        run1_1.setText(text);
-        run1_1.setBold(bold);
-        run1_1.setFontSize(14);
-        run1_1.setItalic(italic);
-        run1_1.setFontFamily("Times New Roman");
-        run1_1.setColor(color == null ? "000000" : color);
-        bigParagraph1.setSpacingAfter(space);
+        XWPFParagraph paragraph = document.createParagraph();
+        XWPFRun run = paragraph.createRun();
+        run.setText(text);
+        run.setBold(bold);
+        run.setFontSize(14);
+        run.setItalic(italic);
+        run.setFontFamily("Times New Roman");
+        run.setColor(color == null ? "000000" : color);
+        paragraph.setSpacingAfter(space);
     }
 
     private static void styleHeaderRow(XWPFTable table) {

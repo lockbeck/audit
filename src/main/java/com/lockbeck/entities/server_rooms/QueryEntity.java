@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "server_rooms")
+@Table(name = "query")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,8 +15,12 @@ public class QueryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(columnDefinition = "TEXT")
     private String question;
+    @Column(columnDefinition = "TEXT")
     private String yes;
+    @Column(columnDefinition = "TEXT")
     private String no;
+    @Column(columnDefinition = "TEXT")
     private String recommendation;
 }

@@ -29,11 +29,11 @@ public class LetterService {
         entity.setDate(localDateFormatter.getLocalDate(request.getDate()));
         entity.setNumber(request.getNumber());
         entity.setIsOurLetter(request.getIsOurLetter());
-        entity.setSubject(subjectService.get(request.getSubjectId()));
         entity.setFile(fileService.get(request.getFileId()));
         if(request.getIsOurLetter()){
             entity.setAuditor(auditorService.get(request.getAuditorId()));
         }else {
+            entity.setSubject(subjectService.get(request.getSubjectId()));
             entity.setStuff(stuffService.get(request.getStuffId()));
             entity.setEntryDate(localDateFormatter.getLocalDate(request.getEntryDate()));
             entity.setEntryNumber(request.getEntryNumber());

@@ -1,5 +1,6 @@
 package com.lockbeck.entities.json;
 
+import com.lockbeck.demo.Response;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,20 +35,10 @@ public class JsonController {
 
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<List<String>> uploadFiles(@RequestParam("file") List<MultipartFile> files) throws IOException {
-        List<String> response = new ArrayList<>();
-        for (MultipartFile file : files) {
-            String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-            Path fileStorage = get(DIRECTORY,filename).toAbsolutePath().normalize();
-            copy(file.getInputStream(),fileStorage,REPLACE_EXISTING);
-            response.add(filename);
-        }
-        return ResponseEntity.ok().body(response);
-    }
+
 
     @PostMapping("/upload/{auditId}")
-    public String uploadJsonFiles(@RequestParam("files") MultipartFile[] files, @PathVariable("auditId")Integer auditId) throws IOException {
+    public ResponseEntity<Response> uploadJsonFiles(@RequestParam("files") MultipartFile[] files, @PathVariable("auditId")Integer auditId) throws IOException {
         List<File> jsonFiles = Arrays.stream(files)
                 .map(file -> {
                     try {
@@ -59,15 +50,14 @@ public class JsonController {
                     }
                 }).collect(Collectors.toList());
 
-        jsonService.processJsonFiles(jsonFiles,auditId);
 
-        return "Files processed successfully";
+        return ResponseEntity.ok(jsonService.processJsonFiles(jsonFiles,auditId));
     }
 
-    @GetMapping("/report")
-    public ResponseEntity<?> downloadFile() throws IOException {
+    @GetMapping("/report/{auditId}")
+    public ResponseEntity<?> downloadFile(@PathVariable("auditId")Integer auditId) throws IOException {
 
-        Resource resource = jsonService.createWordReport();
+        Resource resource = jsonService.createWordReport(auditId);
 
         if (resource == null) {
             return new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);

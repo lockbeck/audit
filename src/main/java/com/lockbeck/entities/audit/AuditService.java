@@ -8,11 +8,25 @@ import com.lockbeck.entities.file.FileService;
 import com.lockbeck.entities.letter.LetterService;
 import com.lockbeck.entities.report.ReportService;
 import com.lockbeck.exceptions.NotFoundException;
+import com.lockbeck.utils.DocumentCreator;
 import com.lockbeck.utils.LocalDateFormatter;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.util.Units;
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
+
+import static com.lockbeck.utils.DocumentCreator.paragraph;
 
 @Service
 @RequiredArgsConstructor
@@ -183,5 +197,88 @@ public class AuditService {
 
         repository.delete(auditEntity);
         return new Response(200,"success");
+    }
+
+    public Resource report() throws IOException, InvalidFormatException {
+//        AuditEntity auditEntity = get(auditId);
+        XWPFDocument document = new DocumentCreator().createDocument();
+
+        XWPFParagraph paragraph = document.createParagraph();
+
+        // Align paragraph to the right
+        paragraph.setAlignment(ParagraphAlignment.LEFT);
+
+
+
+        // Create a run to add multiple lines of text
+        XWPFRun run = paragraph.createRun();
+        run.setFontFamily("Times New Roman");
+        run.setFontSize(12);
+        run.setText("\t\t\t\t\t\t\t\t“Kiberxavfsizlik markazi” DUKning");
+        run.addBreak();  // Move to the next line
+        run.setText("\t\t\t\t\t\t\t\t2024-yil “____”-fevraldagi");
+        run.addBreak();  // Move to the next line
+        run.setText("\t\t\t\t\t\t\t\t____________-son xatiga ilova");
+
+
+        paragraph.setSpacingAfter(500);
+
+        paragraph(document,
+                "\"KIBERXAVFSIZLIK MARKAZI\" DUK",
+                14,
+                true,
+                2000,
+                null,
+                false,
+                ParagraphAlignment.CENTER);
+
+
+        picture(document,300,250);
+
+/*
+        paragraph(document,
+
+                )
+*/
+
+
+        Path uploadsDir = Paths.get("reports");
+        if (!uploadsDir.toFile().exists()) {
+            uploadsDir.toFile().mkdirs(); // Papkani yaratish, agar mavjud bo'lmasa
+        }
+
+        String fileName = "big_report.docx";
+        Path filePath = uploadsDir.resolve(fileName);
+
+        try (FileOutputStream out = new FileOutputStream(filePath.toFile())) {
+            document.write(out);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        document.close();
+
+        // FileSystemResource dan foydalanib, resursni qaytarish
+        return new FileSystemResource(filePath.toFile());
+    }
+
+    private static void picture(XWPFDocument document,Integer width, Integer height) throws InvalidFormatException, IOException {
+        XWPFParagraph paragraphForPicture = document.createParagraph();
+        paragraphForPicture.setAlignment(ParagraphAlignment.CENTER);
+        XWPFRun runForPicture = paragraphForPicture.createRun();
+        String imgFile = "pictures/img.png"; // Replace with your image path
+
+        // Open the image file input stream
+        FileInputStream fis = new FileInputStream(imgFile);
+
+        // Add the image to the document
+        runForPicture.addPicture(fis,
+                XWPFDocument.PICTURE_TYPE_PNG,  // Image type
+                imgFile,                        // Image file name
+                Units.toEMU(width),               // Image width in EMUs (optional, adjust as needed)
+                Units.toEMU(height));              // Image height in EMUs (optional, adjust as needed)
     }
 }
