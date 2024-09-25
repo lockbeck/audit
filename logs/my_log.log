@@ -1,18 +1,26 @@
-2024-09-23T10:43:59.991+05:00  INFO 12556 --- [main] com.lockbeck.AuditApplication            : Starting AuditApplication using Java 21.0.4 with PID 12556 (C:\Users\l.turdaliyev\Desktop\audit\target\classes started by l.turdaliyev in C:\Users\l.turdaliyev\Desktop\audit)
-2024-09-23T10:43:59.995+05:00  INFO 12556 --- [main] com.lockbeck.AuditApplication            : No active profile set, falling back to 1 default profile: "default"
-2024-09-23T10:44:00.321+05:00  INFO 12556 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-09-23T10:44:00.354+05:00  INFO 12556 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 30 ms. Found 16 JPA repository interfaces.
-2024-09-23T10:44:00.586+05:00  INFO 12556 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 4280 (http)
-2024-09-23T10:44:00.590+05:00  INFO 12556 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2024-09-23T10:44:00.590+05:00  INFO 12556 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.26]
-2024-09-23T10:44:00.613+05:00  INFO 12556 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2024-09-23T10:44:00.613+05:00  INFO 12556 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 602 ms
-2024-09-23T10:44:00.669+05:00  INFO 12556 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-09-23T10:44:00.691+05:00  INFO 12556 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
-2024-09-23T10:44:00.708+05:00  INFO 12556 --- [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2024-09-23T10:44:00.826+05:00  INFO 12556 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-09-23T10:44:00.837+05:00  INFO 12556 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2024-09-23T10:44:00.913+05:00  INFO 12556 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@492c9892
-2024-09-23T10:44:00.913+05:00  INFO 12556 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2024-09-23T10:44:00.929+05:00  WARN 12556 --- [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2024-09-23T10:44:01.051+05:00  WARN 12556 --- [main] org.hibernate.id.UUIDHexGenerator        : HHH000409: Using org.hibernate.id.UUIDHexGenerator which does not generate IETF RFC 4122 compliant UUID values; consider using org.hibernate.id.UUIDGenerator instead
+2024-09-25T10:53:05.913+05:00  INFO 17672 --- [main] com.lockbeck.AuditApplication            : Starting AuditApplication using Java 21.0.4 with PID 17672 (C:\Users\l.turdaliyev\Desktop\audit\target\classes started by l.turdaliyev in C:\Users\l.turdaliyev\Desktop\audit)
+2024-09-25T10:53:05.917+05:00  INFO 17672 --- [main] com.lockbeck.AuditApplication            : No active profile set, falling back to 1 default profile: "default"
+2024-09-25T10:53:06.400+05:00  INFO 17672 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-09-25T10:53:06.438+05:00  INFO 17672 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 34 ms. Found 16 JPA repository interfaces.
+2024-09-25T10:53:06.719+05:00  INFO 17672 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 4280 (http)
+2024-09-25T10:53:06.725+05:00  INFO 17672 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-09-25T10:53:06.725+05:00  INFO 17672 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.26]
+2024-09-25T10:53:06.751+05:00  INFO 17672 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-09-25T10:53:06.752+05:00  INFO 17672 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 816 ms
+2024-09-25T10:53:06.825+05:00  INFO 17672 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-09-25T10:53:06.871+05:00  INFO 17672 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-09-25T10:53:06.889+05:00  INFO 17672 --- [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-09-25T10:53:07.039+05:00  INFO 17672 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-09-25T10:53:07.057+05:00  INFO 17672 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-09-25T10:53:07.143+05:00  INFO 17672 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4ac19bc6
+2024-09-25T10:53:07.144+05:00  INFO 17672 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-09-25T10:53:07.172+05:00  WARN 17672 --- [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-09-25T10:53:07.325+05:00  WARN 17672 --- [main] org.hibernate.id.UUIDHexGenerator        : HHH000409: Using org.hibernate.id.UUIDHexGenerator which does not generate IETF RFC 4122 compliant UUID values; consider using org.hibernate.id.UUIDGenerator instead
+2024-09-25T10:53:07.842+05:00  INFO 17672 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-09-25T10:53:08.044+05:00  INFO 17672 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-09-25T10:53:08.250+05:00  INFO 17672 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-09-25T10:53:08.778+05:00  INFO 17672 --- [main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2024-09-25T10:53:08.779+05:00  WARN 17672 --- [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
+2024-09-25T10:53:08.841+05:00  WARN 17672 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-09-25T10:53:09.250+05:00  INFO 17672 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 4280 (http) with context path '/'
+2024-09-25T10:53:09.254+05:00  INFO 17672 --- [main] com.lockbeck.AuditApplication            : Started AuditApplication in 3.56 seconds (process running for 3.892)

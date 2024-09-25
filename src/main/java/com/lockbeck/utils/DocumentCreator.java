@@ -1,7 +1,13 @@
 package com.lockbeck.utils;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.util.Units;
+import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
 import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.stereotype.Component;
+
+import java.io.FileInputStream;
+import java.io.IOException;
 
 @Component
 public class DocumentCreator {
@@ -10,7 +16,8 @@ public class DocumentCreator {
     }
 
     public static void paragraph(XWPFDocument document, String text,int fontsize, boolean bold, int space,
-                                 String color, boolean italic,ParagraphAlignment alignment) {
+                                 String color, boolean italic,ParagraphAlignment alignment,Boolean pageBreak) {
+
         XWPFParagraph paragraph = document.createParagraph();
         paragraph.setAlignment(alignment);
         XWPFRun run = paragraph.createRun();
@@ -20,7 +27,45 @@ public class DocumentCreator {
         run.setItalic(italic);
         run.setFontFamily("Times New Roman");
         run.setColor(color == null ? "000000" : color);
+        if(pageBreak){
+            run.addBreak(BreakType.PAGE);
+        }
         paragraph.setSpacingAfter(space);
+    }
+    public static void addPageHeader(XWPFDocument document, String headerText) {
+        // Create header/footer policy for the document
+        XWPFHeaderFooterPolicy headerFooterPolicy = document.createHeaderFooterPolicy();
+
+        // Create header for odd-numbered pages
+        XWPFHeader header = headerFooterPolicy.createHeader(XWPFHeaderFooterPolicy.DEFAULT);
+
+        // Create a paragraph in the header
+        XWPFParagraph paragraph = header.createParagraph();
+        paragraph.setAlignment(ParagraphAlignment.CENTER); // Align header in the center
+
+        // Create a run to add text to the paragraph
+        XWPFRun run = paragraph.createRun();
+        run.setText(headerText); // Set header text
+        run.setFontSize(12);
+        run.setBold(true);
+        run.setFontFamily("Times New Roman");
+    }
+    public static void picture(XWPFDocument document,Integer width, Integer height) throws InvalidFormatException, IOException {
+        XWPFParagraph paragraphForPicture = document.createParagraph();
+        paragraphForPicture.setAlignment(ParagraphAlignment.CENTER);
+        paragraphForPicture.setSpacingAfter(1600);
+        XWPFRun runForPicture = paragraphForPicture.createRun();
+        String imgFile = "pictures/img.png"; // Replace with your image path
+
+        // Open the image file input stream
+        FileInputStream fis = new FileInputStream(imgFile);
+
+        // Add the image to the document
+        runForPicture.addPicture(fis,
+                XWPFDocument.PICTURE_TYPE_PNG,  // Image type
+                imgFile,                        // Image file name
+                Units.toEMU(width),               // Image width in EMUs (optional, adjust as needed)
+                Units.toEMU(height));              // Image height in EMUs (optional, adjust as needed)
     }
 
     public static void styleHeaderRow(XWPFTable table) {

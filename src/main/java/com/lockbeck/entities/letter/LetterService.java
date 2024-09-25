@@ -48,11 +48,11 @@ public class LetterService {
         entity.setDate(localDateFormatter.getLocalDate(request.getDate()));
         entity.setNumber(request.getNumber());
         entity.setIsOurLetter(request.getIsOurLetter());
-        entity.setSubject(subjectService.get(request.getSubjectId()));
         entity.setFile(fileService.get(request.getFileId()));
         if(request.getIsOurLetter()){
             entity.setAuditor(auditorService.get(request.getAuditorId()));
         }else {
+            entity.setSubject(subjectService.get(request.getSubjectId()));
             entity.setStuff(stuffService.get(request.getStuffId()));
             entity.setEntryDate(localDateFormatter.getLocalDate(request.getEntryDate()));
             entity.setEntryNumber(request.getEntryNumber());
@@ -98,11 +98,11 @@ public class LetterService {
         dto.setNumber(inLetter.getNumber());
         dto.setDate(localDateFormatter.getStringDate(inLetter.getDate()));
         dto.setIsOurLetter(inLetter.getIsOurLetter());
-        dto.setSubject(subjectService.getSubject(inLetter.getSubject()));
         dto.setFile(fileService.getFileDto(inLetter.getFile()));
         if(inLetter.getIsOurLetter()){
             dto.setAuditor(auditorService.getAuditor(inLetter.getAuditor()));
         }else {
+            dto.setSubject(subjectService.getSubject(inLetter.getSubject()));
             dto.setEntryDate(localDateFormatter.getStringDate(inLetter.getEntryDate()));
             dto.setEntryNumber(inLetter.getEntryNumber());
             dto.setStuff(stuffService.getStuff(inLetter.getStuff()));

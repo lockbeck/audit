@@ -13,10 +13,8 @@ import com.lockbeck.utils.LocalDateFormatter;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.util.Units;
-import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
+import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -24,9 +22,10 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.*;
 
-import static com.lockbeck.utils.DocumentCreator.paragraph;
+import static com.lockbeck.utils.DocumentCreator.*;
 
 @Service
 @RequiredArgsConstructor
@@ -225,21 +224,44 @@ public class AuditService {
 
         paragraph(document,
                 "\"KIBERXAVFSIZLIK MARKAZI\" DUK",
-                14,
-                true,
-                2000,
-                null,
-                false,
-                ParagraphAlignment.CENTER);
+                14, true, 2000, null, false, ParagraphAlignment.CENTER, false);
 
 
         picture(document,300,250);
 
-/*
         paragraph(document,
+                "2023 yil 26 dekabrdagi 779-A-son shartnoma asosida oʻtkazilgan\n" +
+                        "“Buxoro neftni qayti ishlash zavodi” Mus’uliyati cheklangan jamiyati axborotlashtirish obyektlarining axborot xavfsizligi talablariga muvofiq auditi (ekspertiza) natijalari yuzasidan 1-779-A-2024-son\n" +
+                        "HISOBOT\n",
+                14, true, 2400, null, false, ParagraphAlignment.CENTER, false);
 
-                )
-*/
+        paragraph(document,
+                "Toshkent - "+ LocalDate.now().getYear()+" y.",
+                14, true, 100, null, false, ParagraphAlignment.CENTER, true);
+
+        paragraph(document,
+                "",
+                14, true, 100, null, false, ParagraphAlignment.CENTER, true);
+
+
+
+        paragraph(document,
+                "MUNDARIJA",
+                14, true, 100, null, false, ParagraphAlignment.CENTER, true
+                );
+
+        paragraph(document,
+                """
+                        Mazkur hujjatda foydalanilgan atamalar, ularning taʼrifi va qisqartmasi, quyidagi me’yoriy hujjatlardan olingan:
+                        \nOʻz DSt 1047:2018 “Axborot texnologiyalari. Atama va ta’riflar”;
+                        \nOʻz DSt 2816:2014 “Axborot texnologiyasi. Axborotni muhofaza qilish vositalarining dasturiy ta’minotini deklaratsiya qilinmagan imkoniyatlar yoʻqligini nazorat qilish darajasi boʻyicha tasniflash;
+                        \nOʻz DSt 2927:2015 “Axborot texnologiyasi. Axborot xavfsizligi. Atamalar va ta’riflar”
+                        \nOʻz DSt ISO/IEC 27000:2022 “Axborot texnologiyasi. Xavfsizlikni ta’minlash usullari. Axborot xavfsizligini boshqarish tizimlari. Sharh va lugʻat”.
+                        """,
+                14, false, 100, null, false, ParagraphAlignment.LEFT, true
+        );
+
+
 
 
         Path uploadsDir = Paths.get("reports");
@@ -265,20 +287,6 @@ public class AuditService {
         return new FileSystemResource(filePath.toFile());
     }
 
-    private static void picture(XWPFDocument document,Integer width, Integer height) throws InvalidFormatException, IOException {
-        XWPFParagraph paragraphForPicture = document.createParagraph();
-        paragraphForPicture.setAlignment(ParagraphAlignment.CENTER);
-        XWPFRun runForPicture = paragraphForPicture.createRun();
-        String imgFile = "pictures/img.png"; // Replace with your image path
 
-        // Open the image file input stream
-        FileInputStream fis = new FileInputStream(imgFile);
 
-        // Add the image to the document
-        runForPicture.addPicture(fis,
-                XWPFDocument.PICTURE_TYPE_PNG,  // Image type
-                imgFile,                        // Image file name
-                Units.toEMU(width),               // Image width in EMUs (optional, adjust as needed)
-                Units.toEMU(height));              // Image height in EMUs (optional, adjust as needed)
-    }
 }
