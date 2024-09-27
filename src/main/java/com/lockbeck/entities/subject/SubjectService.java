@@ -1,17 +1,12 @@
 package com.lockbeck.entities.subject;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lockbeck.demo.Response;
-import com.lockbeck.entities.subject.type.SubjectTypeEntity;
 import com.lockbeck.entities.subject.type.SubjectTypeRepository;
 import com.lockbeck.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
