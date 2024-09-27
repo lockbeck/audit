@@ -1,7 +1,6 @@
 package com.lockbeck.entities.subject;
 
 import com.lockbeck.demo.Response;
-import com.lockbeck.entities.subject.type.SubjectTypeRepository;
 import com.lockbeck.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
