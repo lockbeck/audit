@@ -16,7 +16,6 @@ import java.util.Optional;
 public class SubjectService {
     private final SubjectRepository repository;
     private final ModelMapper modelMapper;
-    private final SubjectTypeRepository subjectTypeRepository;
 
     public Response create(SubjectCreateRequest request) {
 
