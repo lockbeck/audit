@@ -27,7 +27,7 @@ public class SubjectService {
 
         SubjectEntity entity = modelMapper.map(request, SubjectEntity.class);
         SubjectEntity save = repository.save(entity);
-        return new Response(202,"success",save.getId());
+        return new Response(200,"success",save.getId());
     }
 
     public Response update(SubjectUpdateDTO request) {
@@ -109,6 +109,6 @@ public class SubjectService {
         subjectEntity.setType(null);
         repository.delete(subjectEntity);
 
-        return new Response(202,"success");
+        return new Response(200,"success");
     }
 }

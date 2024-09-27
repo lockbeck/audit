@@ -8,6 +8,7 @@ import com.lockbeck.exceptions.BadRequestException;
 import com.lockbeck.exceptions.NotFoundException;
 import com.lockbeck.utils.ValidationUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.xmlbeans.impl.xb.xsdschema.Attribute;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -89,10 +90,10 @@ public class   UserService {
                 .email(save.getEmail())
                 .role(save.getRole())
                 .build();
-        return new Response(201,"User was successfully created",userDTO);
+        return new Response(200,"User was successfully created",userDTO);
     }
 
-    public List<UserDTO> getUsers() {
+    public Response getUsers() {
         UserEntity currentUser = getCurrentUser();
         Iterable<UserEntity> list = userRepository.findAllByDeletedFalse();
         List<UserDTO> dtoList= new LinkedList<>();
@@ -117,38 +118,20 @@ public class   UserService {
             }
             dto.setCreatedDate(currentUser.getCreatedDate());
             dtoList.add(dto);
-            return dtoList;
+            return new Response(200,"success",dtoList);
 
         }
         list.forEach(user -> {
 
             if(currentUser.getRole().equals(Role.ADMIN)&&!user.getEmail().equals(currentUser.getEmail())){
 
-                    UserDTO dto = new UserDTO();
-                    dto.setId(user.getId());
-                    dto.setName(user.getName());
-                    dto.setUsername(user.getUsername());
-                    dto.setEmail(user.getEmail());
-                    dto.setRole(user.getRole());
-
-                    if(user.getLogoutDate().isAfter(LocalDateTime.now())){
-                        dto.setOnline(Boolean.TRUE);
-                    }else {
-                        dto.setOnline(Boolean.FALSE);
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-                        // Format the LocalDateTime object using the formatter
-                        String formattedDateTime = user.getLogoutDate().format(formatter);
-
-                        dto.setLastOnlineDate(formattedDateTime);
-                    }
-                    dto.setCreatedDate(user.getCreatedDate());
-                    dtoList.add(dto);
+                UserDTO dto = getUser(user);
+                dtoList.add(dto);
 
             }
         });
 
-        return dtoList;
+        return new Response(200,"success",dtoList);
     }
     public UserEntity get(Integer id){
 
@@ -162,7 +145,7 @@ public class   UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return  (UserEntity) authentication.getPrincipal();
     }
-    public UserDTO getUserDTO(){
+    public Response getProfile(){
         UserEntity entity = getCurrentUser();
         UserDTO dto = new UserDTO();
         dto.setId(entity.getId());
@@ -170,7 +153,7 @@ public class   UserService {
         dto.setUsername(entity.getUsername());
         dto.setEmail(entity.getEmail());
         dto.setRole(entity.getRole());
-        return dto;
+        return new Response(200,"success",dto);
 
 
     }
@@ -220,5 +203,34 @@ public class   UserService {
         return byUsernameAndDeletedFalse.get();
 
 
+    }
+
+    public Response getUserById(Integer id) {
+        UserEntity userEntity = get(id);
+        UserDTO dto = getUser(userEntity);
+        return new Response(200,"success",dto);
+    }
+
+    private UserDTO getUser(UserEntity user) {
+        UserDTO dto = new UserDTO();
+        dto.setId(user.getId());
+        dto.setName(user.getName());
+        dto.setUsername(user.getUsername());
+        dto.setEmail(user.getEmail());
+        dto.setRole(user.getRole());
+
+        if(user.getLogoutDate().isAfter(LocalDateTime.now())){
+            dto.setOnline(Boolean.TRUE);
+        }else {
+            dto.setOnline(Boolean.FALSE);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+            // Format the LocalDateTime object using the formatter
+            String formattedDateTime = user.getLogoutDate().format(formatter);
+
+            dto.setLastOnlineDate(formattedDateTime);
+        }
+        dto.setCreatedDate(user.getCreatedDate());
+        return dto;
     }
 }

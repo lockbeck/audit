@@ -10,10 +10,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
+
 @RestController
 @RequestMapping("/users")
-@PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
 @RequiredArgsConstructor
 @Validated
 @Slf4j
@@ -27,21 +26,18 @@ public class UserController {
         return ResponseEntity.ok(userService.createUser(dto));
     }
     @GetMapping("/getUsers")
-    @PreAuthorize("hasAnyAuthority('admin:read','management:read')")
-    public ResponseEntity<List<UserDTO>> getUsers() {
+    public ResponseEntity<Response> getUsers() {
 
         return ResponseEntity.ok(userService.getUsers());
     }
     @GetMapping("/getProfile")
-    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','VIEWER')")
-    public ResponseEntity<?> getProfile() {
+    public ResponseEntity<Response> getProfile() {
         log.info("get profile api called");
 
-        return ResponseEntity.ok(userService.getUserDTO());
+        return ResponseEntity.ok(userService.getProfile());
     }
     @PutMapping("/changePsw")
-    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','VIEWER')")
-    public ResponseEntity<?> changePassword(
+    public ResponseEntity<Response> changePassword(
           @RequestBody ChangePasswordRequest request,
           Principal connectedUser
     ) {
@@ -56,15 +52,21 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority('admin:delete')")
-    public ResponseEntity<?> delete(@PathVariable("id") Integer id)
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Response> delete(@PathVariable("id") Integer id)
     {
         return ResponseEntity.ok(userService.delete(id));
     }
     @PutMapping("/update")
-    @PreAuthorize("hasAuthority('admin:update')")
-    public ResponseEntity<?> update(@RequestBody UserUpdateDTO dto)
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Response> update(@RequestBody UserUpdateDTO dto)
     {
         return ResponseEntity.ok(userService.update(dto));
     }
+    @GetMapping("/get/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Response> get(@PathVariable("id") Integer id){
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
+
 }

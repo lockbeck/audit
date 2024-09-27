@@ -19,7 +19,7 @@ public class StuffService {
     public Response create(StuffCreateRequest request) {
         StuffEntity save = repository.save(modelMapper.map(request, StuffEntity.class));
 
-        return new Response(202,"success",save.getId());
+        return new Response(200,"success",save.getId());
     }
 
     public Response update(StuffUpdateDTO dto){
