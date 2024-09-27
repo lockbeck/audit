@@ -74,7 +74,15 @@ public class SubjectService {
                 .build();
     }
 
-    public void saveSubjectsFromJson() throws IOException {
+    public Response delete(String id) {
+        SubjectEntity subjectEntity = get(id);
+        subjectEntity.setType(null);
+        repository.delete(subjectEntity);
+
+        return new Response(200,"success");
+    }
+
+   /* public void saveSubjectsFromJson() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         List<SubjectTest> subjects = objectMapper.readValue(new File("C:\\Users\\reestr\\Desktop\\audit\\tashkilotlar.json"), new TypeReference<List<SubjectTest>>() {});
         subjects.forEach(subject -> {
@@ -102,13 +110,5 @@ public class SubjectService {
         });
         System.out.println(subjects.size());
 
-    }
-
-    public Response delete(String id) {
-        SubjectEntity subjectEntity = get(id);
-        subjectEntity.setType(null);
-        repository.delete(subjectEntity);
-
-        return new Response(200,"success");
-    }
+    }*/
 }

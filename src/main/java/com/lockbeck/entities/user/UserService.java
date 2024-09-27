@@ -8,7 +8,6 @@ import com.lockbeck.exceptions.BadRequestException;
 import com.lockbeck.exceptions.NotFoundException;
 import com.lockbeck.utils.ValidationUtil;
 import lombok.RequiredArgsConstructor;
-import org.apache.xmlbeans.impl.xb.xsdschema.Attribute;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
