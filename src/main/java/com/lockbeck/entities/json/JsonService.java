@@ -69,29 +69,29 @@ public class JsonService {
     @Transactional
     public Response processJsonFiles(List<File> jsonFiles, Integer auditId) throws IOException {
         AuditEntity auditEntity = auditService.get(auditId);
-        String name = auditEntity.getInLetter().getSubject().getName();
-        File zipFile = Files.createTempFile(name+"_ishchi_stansiyalri" , ".zip").toFile();
-
-        try (FileOutputStream fos = new FileOutputStream(zipFile);
-             ZipOutputStream zipOut = new ZipOutputStream(fos)) {
-
-            for (File jsonFile : jsonFiles) {
-                try (FileInputStream fis = new FileInputStream(jsonFile)) {
-                    ZipEntry zipEntry = new ZipEntry(jsonFile.getName());
-                    zipOut.putNextEntry(zipEntry);
-
-                    byte[] bytes = new byte[1024];
-                    int length;
-                    while ((length = fis.read(bytes)) >= 0) {
-                        zipOut.write(bytes, 0, length);
-                    }
-
-                    zipOut.closeEntry();
-                }
-            }
-        }catch (IOException e) {
-            System.out.println("saqlanmadi");
-        }
+//        String name = auditEntity.getInLetter().getSubject().getName();
+//        File zipFile = Files.createTempFile(name+"_ishchi_stansiyalri" , ".zip").toFile();
+//
+//        try (FileOutputStream fos = new FileOutputStream(zipFile);
+//             ZipOutputStream zipOut = new ZipOutputStream(fos)) {
+//
+//            for (File jsonFile : jsonFiles) {
+//                try (FileInputStream fis = new FileInputStream(jsonFile)) {
+//                    ZipEntry zipEntry = new ZipEntry(jsonFile.getName());
+//                    zipOut.putNextEntry(zipEntry);
+//
+//                    byte[] bytes = new byte[1024];
+//                    int length;
+//                    while ((length = fis.read(bytes)) >= 0) {
+//                        zipOut.write(bytes, 0, length);
+//                    }
+//
+//                    zipOut.closeEntry();
+//                }
+//            }
+//        }catch (IOException e) {
+//            System.out.println("saqlanmadi");
+//        }
         for (File jsonFile : jsonFiles) {
 
             JsonEntity jsonEntity = objectMapper.readValue(jsonFile, JsonEntity.class);
