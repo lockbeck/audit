@@ -4,11 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lockbeck.demo.Response;
 import com.lockbeck.entities.audit.AuditEntity;
 import com.lockbeck.entities.audit.AuditService;
+import com.lockbeck.entities.json.antivirus.Antivirus;
 import com.lockbeck.entities.json.antivirus.AntivirusRepository;
 import com.lockbeck.entities.json.antivirus.AntivirusService;
+import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowser;
 import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowserRepository;
 import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowserService;
+import com.lockbeck.entities.json.usb.USB;
 import com.lockbeck.entities.json.usb.UsbRepository;
+import com.lockbeck.entities.json.usb.UsbService;
+import com.lockbeck.exceptions.NotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.xwpf.usermodel.*;
@@ -23,8 +28,10 @@ import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -40,6 +47,9 @@ public class JsonService {
     private final AuditService auditService;
 
     private static final List<String> ILLEGAL_SOFTWARES = List.of("Telegram Desktop", "AnyDesk");
+    private final AntivirusService antivirusService;
+    private final UsbService usbService;
+    private final SocialAppsInBrowserService socialAppsInBrowserService;
 
     /*public void create(JsonCreateRequest request) {
 
@@ -124,6 +134,7 @@ public class JsonService {
         double noPlomba = 0;
         double hasInternet = 0;
         double hasThreeGModem = 0;
+        double hasAntivirusPsw = 0;
 
 
         HashMap<String, String> remoteAccessMap = new HashMap<>();
@@ -134,6 +145,7 @@ public class JsonService {
         HashMap<String, String> illSoftMap = new HashMap<>();
         HashMap<String, String> oldOsMap = new HashMap<>();
         HashMap<String, String> threeGModemMap = new HashMap<>();
+        HashMap<String, String> antivirusPswMap = new HashMap<>();
 
         for (JsonEntity jsonEntity : all) {
             if (jsonEntity.getUps().equals(Boolean.FALSE)) {
@@ -186,7 +198,7 @@ public class JsonService {
                 noFirewall++;
                 firewallMap.put(jsonEntity.getMac(), jsonEntity.getName());
             }
-            if (jsonEntity.getAntivirus().isEmpty()) {
+            if (jsonEntity.getAntivirus().isEmpty()&&jsonEntity.getHasAntivirusPsw().equals(Boolean.FALSE)) {
                 noAntivirus++;
                 antivirusMap.put(jsonEntity.getMac(), jsonEntity.getName());
             }
@@ -195,6 +207,9 @@ public class JsonService {
             }
             if (jsonEntity.getPlomba().equals(Boolean.FALSE)) {
                 noPlomba++;
+            }
+            if (jsonEntity.getHasAntivirusPsw().equals(Boolean.FALSE)) {
+                hasAntivirusPsw++;
             }
         }
 
@@ -319,6 +334,13 @@ public class JsonService {
                 false
         );
         paragraph(document,
+                "Antivirus vositasi parolga ega emas:  " + Math.round((hasAntivirusPsw / total) * 100) + "%",
+                false,
+                60,
+                null,
+                false
+        );
+        paragraph(document,
                 "Plombaga ega emas:  " + Math.round((noPlomba / total) * 100) + "%",
                 false,
                 200,
@@ -425,7 +447,7 @@ public class JsonService {
                 "0000FF",
                 false);
         paragraph(document,
-                "22-jadval. Antivirus dasturiy ta’minotiga ega bo‘lmagan ishchi kompyuterlar. ",
+                "22-jadval. Antivirus dasturiy ta’minotiga ega bo‘lmagan ishchi kompyuterlar.",
                 false,
                 180,
                 "0000FF",
@@ -439,6 +461,27 @@ public class JsonService {
             antivirusI.updateAndGet(v -> v + 1);
         });
         space(document, 200);
+        paragraph(document,
+                "\t5. Antivirus sozlamalari xizmatlarini (modullarini) yoqish/o'chirish uchun cheklov o'rnatish.",
+                false,
+                180,
+                "0000FF",
+                false);
+        paragraph(document,
+                "23-jadval. Antivirus dasturiy ta’minotida parolga ega bo‘lmagan ishchi kompyuterlar.",
+                false,
+                180,
+                "0000FF",
+                true);
+        XWPFTable antivirusPswTable = getTable(document, (int) hasAntivirusPsw);
+        styleHeaderRow(antivirusPswTable);
+        AtomicReference<Integer> antivirusPswI = new AtomicReference<>(1);
+        antivirusPswMap.forEach((s, s2) -> {
+            styleDataRow(antivirusPswTable.getRow(antivirusPswI.get()),antivirusPswI.toString(), s2, s, antivirusPswI.get() % 2 == 1);
+            antivirusPswI.updateAndGet(v -> v + 1);
+        });
+
+        space(document, 200);
 
         paragraph(document,
                 "\t6.  Ish jarayonida ma’lumot yaxlitligini yo‘qotish va xotira qurilmalari bilan bog‘liq insidentlarni oldini olish uchun ishchi kompyuterlarni uzluksiz (zaxira) elektr manbai (UPS) bilan ta’minlash.",
@@ -448,7 +491,7 @@ public class JsonService {
                 false);
 
         paragraph(document,
-                "24-jadval. Uzluksiz (zaxira) elektr manbai (UPS) bilan ta’minlanmagan ishchi kompyuterlar. ",
+                "24-jadval. Uzluksiz (zaxira) elektr manbai (UPS) bilan ta’minlanmagan ishchi kompyuterlar.",
                 false,
                 180,
                 "0000FF",
@@ -471,7 +514,7 @@ public class JsonService {
                 false);
 
         paragraph(document,
-                "25-jadval. Ruxsat etilmagan dasturiy ta’minotga ega bo‘lgan ishchi kompyuterlar. ",
+                "25-jadval. Ruxsat etilmagan dasturiy ta’minotga ega bo‘lgan ishchi kompyuterlar.",
                 false,
                 180,
                 "0000FF",
@@ -614,6 +657,97 @@ public class JsonService {
         run.setText(text);    // Set the text in the run
     }
 
+    public  Response list(Integer id){
+        List<JsonDTO> list = new ArrayList<>();
+        for (JsonEntity jsonEntity : jsonRepository.findAllByAuditId(id)) {
+            list.add(getJsonDTO(jsonEntity));
+        }
+        return new Response(200,"success",list);
+
+    }
+
+    public JsonDTO getJsonDTO(JsonEntity entity) {
+        return JsonDTO.builder()
+                .id(entity.getId())
+                .ipAddress(entity.getIpAddress())
+                .mac(entity.getMac())
+                .name(entity.getName())
+                .os(entity.getOs())
+                .cpu(entity.getCpu())
+                .ram(entity.getRam())
+                .remoteAccess(entity.getRemoteAccess())
+                .adminRight(entity.getAdminRight())
+                .firewall(entity.getFirewall())
+                .antivirus(antivirusService.getList(entity.getAntivirus()))
+                .hasLicence(entity.getHasLicence())
+                .threeGModem(entity.getThreeGModem())
+                .internet(entity.getInternet())
+                .networkStatus(entity.getNetworkStatus())
+                .usb(usbService.getList(entity.getUsb()))
+                .dvd(entity.getDvd())
+                .startUpApps(entity.getStartUpApps())
+                .installedApps(entity.getInstalledApps())
+                .ups(entity.getUps())
+                .plomba(entity.getPlomba())
+                .socialAppsInDesktop(entity.getSocialAppsInDesktop())
+                .socialAppsInBrowser(socialAppsInBrowserService.getList(entity.getSocialAppsInBrowser()))
+                .hasAntivirusPsw(entity.getHasAntivirusPsw())
+                .build();
+    }
 
 
+    public Response delete(Integer jsonId) {
+
+        Optional<JsonEntity> byId = jsonRepository.findById(jsonId);
+        if (byId.isEmpty()) {
+            throw new NotFoundException("Json file topilmadi");
+        }
+        JsonEntity jsonEntity = byId.get();
+        for (Antivirus antivirus : jsonEntity.getAntivirus()) {
+            antivirusService.delete(antivirus);
+        }
+        for (USB usb : jsonEntity.getUsb()) {
+            usbService.delete(usb);
+        }
+        for (SocialAppsInBrowser socialAppsInBrowser : jsonEntity.getSocialAppsInBrowser()) {
+            socialAppsInBrowserService.delete(socialAppsInBrowser);
+        }
+        jsonRepository.delete(jsonEntity);
+
+
+        return new Response(200,"success");
+    }
+
+    public Response create(JsonCreateRequest dto) {
+        JsonEntity entity = new JsonEntity();
+        entity.setIpAddress(dto.getIpAddress());
+        entity.setMac(dto.getMac());
+        entity.setName(dto.getName());
+        entity.setOs(dto.getOs());
+        entity.setCpu(dto.getCpu());
+        entity.setRam(dto.getRam());
+        entity.setRemoteAccess(dto.getRemoteAccess());
+        entity.setAdminRight(dto.getAdminRight());
+        entity.setFirewall(dto.getFirewall());
+
+        entity.setHasLicence(dto.getHasLicence());
+        entity.setThreeGModem(dto.getThreeGModem());
+        entity.setInternet(dto.getInternet());
+        entity.setNetworkStatus(dto.getNetworkStatus());
+
+        entity.setDvd(dto.getDvd());
+        entity.setStartUpApps(dto.getStartUpApps());
+        entity.setInstalledApps(dto.getInstalledApps());
+        entity.setUps(dto.getUps());
+        entity.setPlomba(dto.getPlomba());
+        entity.setSocialAppsInDesktop(dto.getSocialAppsInDesktop());
+
+        entity.setHasAntivirusPsw(dto.getHasAntivirusPsw());
+        jsonRepository.save(entity);
+        antivirusService.create(dto.getAntivirus(),entity);
+        usbService.create(dto.getUsb(),entity);
+        socialAppsInBrowserService.create(dto.getSocialAppsInBrowser(),entity);
+
+        return new Response(200,"success");
+    }
 }

@@ -4,6 +4,7 @@ import com.lockbeck.entities.json.JsonEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,5 +21,25 @@ public class SocialAppsInBrowserService {
             social.setJson(save);
             socialAppsInBrowserRepository.save(social);
         }
+    }
+
+    public List<SocialAppsInBrowserDTO> getList(List<SocialAppsInBrowser> socialAppsInBrowser) {
+        List<SocialAppsInBrowserDTO> socialAppsInBrowserDTOs = new ArrayList<>();
+        for (SocialAppsInBrowser socialApp : socialAppsInBrowser) {
+            SocialAppsInBrowserDTO build = SocialAppsInBrowserDTO.builder()
+                    .name(socialApp.getName())
+                    .url(socialApp.getUrl())
+                    .lastSeen(socialApp.getLastSeen())
+                    .id(socialApp.getId())
+                    .build();
+            socialAppsInBrowserDTOs.add(build);
+
+        }
+        return socialAppsInBrowserDTOs;
+    }
+
+    public void delete(SocialAppsInBrowser socialAppsInBrowser) {
+        socialAppsInBrowser.setJson(null);
+        socialAppsInBrowserRepository.delete(socialAppsInBrowser);
     }
 }

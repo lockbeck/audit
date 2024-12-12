@@ -53,37 +53,7 @@ public class AuditController {
         return ResponseEntity.ok(service.statistics());
     }
 
-    /*@GetMapping("/report/{auditId}")
-    public ResponseEntity<?> report(@PathVariable Integer auditId) throws IOException {
-        Resource resource = auditService.report(auditId);
 
-        if (resource == null) {
-            return new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
-        }
 
-        String contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-        String headerValue = "inline; filename=\"report.docx\"";
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
-                .body(resource);
-    }*/
-    @GetMapping("/report")
-    public ResponseEntity<?> report() throws IOException, InvalidFormatException {
-        Resource resource = auditService.report();
-
-        if (resource == null) {
-            return new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
-        }
-
-        String contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-        String headerValue = "inline; filename=\"report.docx\"";
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
-                .body(resource);
-    }
 
 }

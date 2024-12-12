@@ -29,7 +29,7 @@ public class   UserService {
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     private final ValidationUtil validationUtil;
-    public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
+    public Response changePassword(ChangePasswordRequest request, Principal connectedUser) {
 
         var user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
 
@@ -47,6 +47,7 @@ public class   UserService {
 
         // save the new password
         userRepository.save(user);
+        return new Response(200,"success") ;
     }
     public Response changePswAdmin(ChangePasswordRequestAdmin requestAdmin,Integer userId){
         UserEntity entity = get(userId);

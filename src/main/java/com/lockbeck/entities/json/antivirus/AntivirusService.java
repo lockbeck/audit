@@ -5,6 +5,8 @@ import com.lockbeck.entities.json.JsonEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.xml.stream.events.DTD;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,5 +23,24 @@ public class AntivirusService {
             antivirus.setJson(save);
             antivirusRepository.save(antivirus);
         }
+    }
+
+    public List<AntivirusDTO> getList(List<Antivirus> antivirus) {
+        List<AntivirusDTO> dtos = new ArrayList<>();
+        antivirus.forEach(entity -> {
+            AntivirusDTO build = AntivirusDTO.builder()
+                    .name(entity.getName())
+                    .status(entity.getStatus())
+                    .updatedAt(entity.getUpdatedAt())
+                    .id(entity.getId())
+                    .build();
+            dtos.add(build);
+        });
+        return dtos;
+    }
+
+    public void delete(Antivirus antivirus) {
+        antivirus.setJson(null);
+        antivirusRepository.delete(antivirus);
     }
 }

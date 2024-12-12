@@ -52,6 +52,8 @@ public class AuthenticationService {
         user.setLoginDate(LocalDateTime.now());
         user.setLogoutDate(LocalDateTime.now().plusHours(2));
         repository.save(user);
+
+        tokenRepository.deleteExpired();
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .build();

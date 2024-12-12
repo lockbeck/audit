@@ -1,6 +1,7 @@
 package com.lockbeck.entities.json;
 
 import com.lockbeck.demo.Response;
+import io.swagger.v3.core.util.Json;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,12 @@ public class JsonController {
         return ResponseEntity.ok(jsonService.processJsonFiles(jsonFiles,auditId));
     }
 
+    @PostMapping("/create")
+    public ResponseEntity<Response> create(@RequestBody JsonCreateRequest dto) {
+        return ResponseEntity.ok(jsonService.create(dto));
+    }
+
+
     @GetMapping("/report/{auditId}")
     public ResponseEntity<?> downloadFile(@PathVariable("auditId")Integer auditId) throws IOException {
 
@@ -63,6 +70,18 @@ public class JsonController {
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
                 .body(resource);
+    }
+
+    @GetMapping("/list/{auditId}")
+    public ResponseEntity<?> list(@PathVariable("auditId")Integer auditId) throws IOException {
+
+      return ResponseEntity.ok(jsonService.list(auditId));
+
+    }
+
+    @DeleteMapping("/delete/{jsonId}")
+    public ResponseEntity<Response> delete(@PathVariable("jsonId")Integer auditId) throws IOException {
+        return ResponseEntity.ok(jsonService.delete(auditId));
     }
 
 }

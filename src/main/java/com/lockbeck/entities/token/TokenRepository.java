@@ -1,6 +1,8 @@
 package com.lockbeck.entities.token;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -21,4 +23,10 @@ public interface TokenRepository extends JpaRepository<Token, Integer> {
 
   List<Token> findByUserEntityId(Integer id);
 
+  @Modifying
+  @Transactional
+  @Query("""
+delete from Token t where t.revoked = true and t.expired = true
+""")
+    void deleteExpired();
 }

@@ -13,6 +13,7 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/users")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
 @RequiredArgsConstructor
 @Validated
 @Slf4j
@@ -25,6 +26,7 @@ public class UserController {
     public ResponseEntity<Response> createUser(@Valid @RequestBody UserCreateDTO dto) {
         return ResponseEntity.ok(userService.createUser(dto));
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getUsers")
     public ResponseEntity<Response> getUsers() {
 

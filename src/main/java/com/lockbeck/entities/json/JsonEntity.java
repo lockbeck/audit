@@ -87,6 +87,9 @@ public class JsonEntity {
     @JsonProperty("UPS")
     private Boolean ups;
 
+    @JsonProperty("HasAntivirusPsw")
+    private Boolean hasAntivirusPsw;
+
     @JsonProperty("PLOMBA")
     private Boolean plomba;
 
