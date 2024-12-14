@@ -1,6 +1,7 @@
 package com.lockbeck.entities.contract;
 
 import com.lockbeck.demo.Response;
+import com.lockbeck.entities.file.FileEntity;
 import com.lockbeck.entities.file.FileService;
 import com.lockbeck.exceptions.NotFoundException;
 import com.lockbeck.utils.LocalDateFormatter;
@@ -100,8 +101,10 @@ public class ContractService {
     }
 
     public void delete(ContractEntity contract) {
-        fileService.delete(contract.getFile());
-
+        FileEntity file = contract.getFile();
+        contract.setFile(null);
         repository.delete(contract);
+        fileService.delete(file);
+
     }
 }

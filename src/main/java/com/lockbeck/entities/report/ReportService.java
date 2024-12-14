@@ -1,7 +1,9 @@
 package com.lockbeck.entities.report;
 
 import com.lockbeck.demo.Response;
+import com.lockbeck.entities.file.FileEntity;
 import com.lockbeck.entities.file.FileService;
+import com.lockbeck.entities.letter.LetterEntity;
 import com.lockbeck.entities.letter.LetterService;
 import com.lockbeck.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -83,7 +85,13 @@ public class ReportService {
     }
 
     public void delete(ReportEntity report) {
-        fileService.delete(report.getReportFile());
+
+        FileEntity reportFile = report.getReportFile();
+        LetterEntity letter = report.getLetter();
+        report.setReportFile(null);
+        report.setLetter(null);
         repository.delete(report);
+        fileService.delete(reportFile);
+        letterService.delete(letter);
     }
 }

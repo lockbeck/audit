@@ -2,6 +2,7 @@ package com.lockbeck.entities.letter;
 
 import com.lockbeck.demo.Response;
 import com.lockbeck.entities.auditor.AuditorService;
+import com.lockbeck.entities.file.FileEntity;
 import com.lockbeck.entities.file.FileService;
 import com.lockbeck.entities.stuff.StuffService;
 import com.lockbeck.entities.subject.SubjectService;
@@ -111,11 +112,12 @@ public class LetterService {
     }
 
     public void delete(LetterEntity inLetter) {
+        FileEntity file = inLetter.getFile();
         inLetter.setAuditor(null);
         inLetter.setStuff(null);
         inLetter.setSubject(null);
-        fileService.delete(inLetter.getFile());
         inLetter.setFile(null);
+        fileService.delete(file);
         repository.delete(inLetter);
     }
 }
