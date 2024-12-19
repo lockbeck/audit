@@ -1,7 +1,6 @@
 package com.lockbeck.entities.json;
 
 import com.lockbeck.demo.Response;
-import io.swagger.v3.core.util.Json;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,7 +20,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/json")
 public class JsonController {
-    public static final String DIRECTORY = System.getProperty("user.home")+"/Desktop/audit/jsons";
     private final JsonService jsonService;
 
     public JsonController(JsonService jsonService) {

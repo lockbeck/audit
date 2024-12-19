@@ -12,24 +12,12 @@ import com.lockbeck.entities.letter.LetterService;
 import com.lockbeck.entities.report.ReportEntity;
 import com.lockbeck.entities.report.ReportService;
 import com.lockbeck.exceptions.NotFoundException;
-import com.lockbeck.utils.DocumentCreator;
 import com.lockbeck.utils.LocalDateFormatter;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.util.Units;
-import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
-import org.apache.poi.xwpf.usermodel.*;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.util.*;
 
-import static com.lockbeck.utils.DocumentCreator.*;
 
 @Service
 @RequiredArgsConstructor

@@ -1,15 +1,8 @@
 package com.lockbeck.entities.json;
 
-import com.lockbeck.entities.json.antivirus.Antivirus;
 import com.lockbeck.entities.json.antivirus.AntivirusCreateRequest;
-import com.lockbeck.entities.json.antivirus.AntivirusDTO;
-import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowser;
 import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowserCreateRequest;
-import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowserDTO;
-import com.lockbeck.entities.json.usb.USB;
 import com.lockbeck.entities.json.usb.USBCreateRequest;
-import com.lockbeck.entities.json.usb.USBDTO;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
