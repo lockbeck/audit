@@ -3,9 +3,13 @@ package com.lockbeck.entities.audit;
 import com.lockbeck.demo.Response;
 import com.lockbeck.entities.auditor.AuditorEntity;
 import com.lockbeck.entities.auditor.AuditorService;
+import com.lockbeck.entities.contract.ContractEntity;
 import com.lockbeck.entities.contract.ContractService;
+import com.lockbeck.entities.file.FileEntity;
 import com.lockbeck.entities.file.FileService;
+import com.lockbeck.entities.letter.LetterEntity;
 import com.lockbeck.entities.letter.LetterService;
+import com.lockbeck.entities.report.ReportEntity;
 import com.lockbeck.entities.report.ReportService;
 import com.lockbeck.exceptions.NotFoundException;
 import com.lockbeck.utils.DocumentCreator;
@@ -178,23 +182,33 @@ public class AuditService {
 
     public Response delete(Integer id) {
         AuditEntity auditEntity = get(id);
-        letterService.delete(auditEntity.getInLetter());
-        if(auditEntity.getOutLetter() != null) {
-            letterService.delete(auditEntity.getOutLetter());
-        }
-        if(auditEntity.getContract() != null) {
-            contractService.delete(auditEntity.getContract());
-        }
-        if(auditEntity.getReport() != null) {
-            reportService.delete(auditEntity.getReport());
-        }
-
-        if(auditEntity.getListDoc() != null) {
-            fileService.delete(auditEntity.getListDoc());
-        }
+        LetterEntity inLetter = auditEntity.getInLetter();
+        LetterEntity outLetter = auditEntity.getOutLetter();
+        ContractEntity contract = auditEntity.getContract();
+        ReportEntity report = auditEntity.getReport();
+        FileEntity listDoc = auditEntity.getListDoc();
         auditEntity.setLeader(null);
-
+        auditEntity.setOutLetter(null);
+        auditEntity.setInLetter(null);
+        auditEntity.setContract(null);
+        auditEntity.setReport(null);
+        auditEntity.setListDoc(null);
         repository.delete(auditEntity);
+        letterService.delete(inLetter);
+        if(outLetter != null) {
+            letterService.delete(outLetter);
+        }
+        if(contract != null) {
+            contractService.delete(contract);
+        }
+        if(report != null) {
+            reportService.delete(report);
+        }
+
+        if(listDoc != null) {
+            fileService.delete(listDoc);
+        }
+
         return new Response(200,"success");
     }
 

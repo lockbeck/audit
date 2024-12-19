@@ -117,7 +117,7 @@ public class LetterService {
         inLetter.setStuff(null);
         inLetter.setSubject(null);
         inLetter.setFile(null);
-        fileService.delete(file);
         repository.delete(inLetter);
+        fileService.delete(file);
     }
 }

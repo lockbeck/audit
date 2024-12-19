@@ -26,6 +26,7 @@ public class JsonCreateRequest {
     private String os;
     private String cpu;
     private String ram;
+    private String location;
     private Boolean remoteAccess;
     private String adminRight;
     private String firewall;

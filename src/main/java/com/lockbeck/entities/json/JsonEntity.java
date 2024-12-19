@@ -40,6 +40,8 @@ public class JsonEntity {
 
     @JsonProperty("RAM")
     private String ram;
+    @JsonProperty("Location")
+    private String location;
 
     @JsonProperty("RemoteAccess")
     private Boolean remoteAccess;

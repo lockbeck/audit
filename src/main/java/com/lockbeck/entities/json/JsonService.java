@@ -75,6 +75,9 @@ public class JsonService {
         socialAppsInBrowserService.create(request.getSocialAppsInBrowser(), save);
 
     }*/
+    private static final String JSON_FOLDER_PATH = "E:\\files";
+
+
 
     @Transactional
     public Response processJsonFiles(List<File> jsonFiles, Integer auditId) throws IOException {
@@ -120,7 +123,7 @@ public class JsonService {
 
     public Resource createWordReport(Integer auditId) throws IOException {
 
-        List<JsonEntity> all = jsonRepository.findAllByAuditId(auditId);
+        List<JsonEntity> all = loadEntitiesFromFolder();
         double total = all.size();
 
         double hasRemoteAccess = 0;
@@ -202,6 +205,7 @@ public class JsonService {
                 noAntivirus++;
                 antivirusMap.put(jsonEntity.getMac(), jsonEntity.getName());
             }
+
             if (jsonEntity.getHasLicence().equals(Boolean.FALSE)) {
                 noAntivirusLicense++;
             }
@@ -210,6 +214,7 @@ public class JsonService {
             }
             if (jsonEntity.getHasAntivirusPsw().equals(Boolean.FALSE)) {
                 hasAntivirusPsw++;
+                antivirusPswMap.put(jsonEntity.getMac(), jsonEntity.getName());
             }
         }
 
@@ -232,7 +237,7 @@ public class JsonService {
                 false
         );
         paragraph(document,
-                "Zaxira elektr ta'minot manbaiga ega emas:  " + Math.round((noUps / total) * 100) + "%",
+                "Zaxira elektr ta'minot manbaiga ega emas:  " + (int)noUps + " "+Math.round((noUps / total) * 100) + "%",
                 false,
                 60,
                 null,
@@ -240,7 +245,7 @@ public class JsonService {
         );
 
         paragraph(document,
-                "Internetga ulangan kompyuterlar:  " + Math.round((hasInternet / total) * 100) + "%",
+                "Internetga ulangan kompyuterlar:  " + (int)hasInternet+ " "+Math.round((hasInternet / total) * 100) + "%",
                 false,
                 60,
                 null,
@@ -248,7 +253,7 @@ public class JsonService {
         );
 
         paragraph(document,
-                "3G modem qurilmasiga ega:  " + Math.round((hasThreeGModem / total) * 100) + "%",
+                "3G modem qurilmasiga ega:  " + (int)hasThreeGModem+ " " +Math.round((hasThreeGModem / total) * 100) + "%",
                 false,
                 180,
                 null,
@@ -264,7 +269,7 @@ public class JsonService {
         );
 
         paragraph(document,
-                "Cheklanmagan (administratorlik) huquqlariga ega:  " + Math.round((adminTrue / total) * 100) + "%",
+                "Cheklanmagan (administratorlik) huquqlariga ega:  " + (int)adminTrue+ " "+Math.round((adminTrue / total) * 100) + "%",
                 false,
                 180,
                 null,
@@ -281,7 +286,7 @@ public class JsonService {
         );
 
         paragraph(document,
-                "Potensial zaif MsRDP vositalaridan foydalaniladi:  " + Math.round((hasRemoteAccess / total) * 100 )+ "%",
+                "Potensial zaif MsRDP vositalaridan foydalaniladi:  " + (int)hasRemoteAccess+" " +Math.round((hasRemoteAccess / total) * 100 )+ "%",
                 false,
                 60,
                 null,
@@ -289,7 +294,7 @@ public class JsonService {
         );
 
         paragraph(document,
-                "Ruxsat etilmagan dasturiy ta’minotlarga ega :  " + Math.round((illegalSoftware / total) * 100) + "%",
+                "Ruxsat etilmagan dasturiy ta’minotlarga ega :  " + (int)illegalSoftware+" "+ Math.round((illegalSoftware / total) * 100) + "%",
                 false,
                 60,
                 null,
@@ -297,7 +302,7 @@ public class JsonService {
         );
 
         paragraph(document,
-                "Ma’nan eskirgan operatsion tizimlar:  " + Math.round((oldOs / total) * 100) + "%",
+                "Ma’nan eskirgan operatsion tizimlar:  " + (int)oldOs+" "+ Math.round((oldOs / total) * 100) + "%",
                 false,
                 180,
                 null,
@@ -313,35 +318,35 @@ public class JsonService {
         );
 
         paragraph(document,
-                "Lokal tarmoqlararo ekran vositalari ishlatilmaydi:  " + Math.round((noFirewall / total) * 100) + "%",
+                "Lokal tarmoqlararo ekran vositalari ishlatilmaydi:  " + (int)noFirewall+" "+ Math.round((noFirewall / total) * 100) + "%",
                 false,
                 60,
                 null,
                 false
         );
         paragraph(document,
-                "Antivirus vositasiga ega emas:  " + Math.round((noAntivirus / total) * 100) + "%",
+                "Antivirus vositasiga ega emas:  " + (int)noAntivirus+" "+ Math.round((noAntivirus / total) * 100) + "%",
                 false,
                 60,
                 null,
                 false
         );
         paragraph(document,
-                "Antivirus vositasi litsenziyaga ega emas:  " + Math.round((noAntivirusLicense / total) * 100) + "%",
+                "Antivirus vositasi litsenziyaga ega emas:  " + (int)noAntivirusLicense+" "+Math.round((noAntivirusLicense / total) * 100) + "%",
                 false,
                 60,
                 null,
                 false
         );
         paragraph(document,
-                "Antivirus vositasi parolga ega emas:  " + Math.round((hasAntivirusPsw / total) * 100) + "%",
+                "Antivirus vositasi parolga ega emas:  " + (int)hasAntivirusPsw+" "+Math.round((hasAntivirusPsw / total) * 100) + "%",
                 false,
                 60,
                 null,
                 false
         );
         paragraph(document,
-                "Plombaga ega emas:  " + Math.round((noPlomba / total) * 100) + "%",
+                "Plombaga ega emas:  " +(int) noPlomba+" "+ Math.round((noPlomba / total) * 100) + "%",
                 false,
                 200,
                 null,
@@ -596,6 +601,23 @@ public class JsonService {
         // FileSystemResource dan foydalanib, resursni qaytarish
         return new FileSystemResource(filePath.toFile());
     }
+    private List<JsonEntity> loadEntitiesFromFolder() throws IOException {
+        List<JsonEntity> entities = new ArrayList<>();
+        File folder = new File(JSON_FOLDER_PATH);
+
+        // Scan all files in the directory
+        File[] files = folder.listFiles((dir, name) -> name.endsWith(".json"));
+        if (files != null) {
+            for (File file : files) {
+                // Parse each JSON file into a JsonEntity
+                try (FileInputStream fileInputStream = new FileInputStream(file)) {
+                    JsonEntity entity = objectMapper.readValue(fileInputStream, JsonEntity.class);
+                    entities.add(entity);
+                }
+            }
+        }
+        return entities;
+    }
 
     private static void space(XWPFDocument document, int space) {
         XWPFParagraph paragraph = document.createParagraph();
@@ -675,6 +697,7 @@ public class JsonService {
                 .os(entity.getOs())
                 .cpu(entity.getCpu())
                 .ram(entity.getRam())
+                .location(entity.getLocation())
                 .remoteAccess(entity.getRemoteAccess())
                 .adminRight(entity.getAdminRight())
                 .firewall(entity.getFirewall())
@@ -726,6 +749,7 @@ public class JsonService {
         entity.setOs(dto.getOs());
         entity.setCpu(dto.getCpu());
         entity.setRam(dto.getRam());
+        entity.setLocation(dto.getLocation());
         entity.setRemoteAccess(dto.getRemoteAccess());
         entity.setAdminRight(dto.getAdminRight());
         entity.setFirewall(dto.getFirewall());
