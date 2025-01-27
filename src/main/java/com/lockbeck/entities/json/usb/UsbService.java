@@ -13,6 +13,7 @@ public class UsbService {
     private final UsbRepository usbRepository;
 
     public void create(List<USBCreateRequest> requests, JsonEntity save) {
+        if (requests.isEmpty()) {return;}
         for (USBCreateRequest request : requests) {
             USB usb = new USB();
             usb.setDeviceId(request.getDeviceId());

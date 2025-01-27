@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SocialAppsInBrowserCreateRequest {
-    public String Name;
-    public String Url;
-    public String LastSeen;
+    public String name;
+    public String url;
+    public String lastSeen;
 }

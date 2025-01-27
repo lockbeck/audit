@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class USBCreateRequest {
-    public String DeviceId;
-    public String PNPDeviceID;
-    public String Description;
+    public String deviceId;
+    public String pNPDeviceID;
+    public String description;
 }

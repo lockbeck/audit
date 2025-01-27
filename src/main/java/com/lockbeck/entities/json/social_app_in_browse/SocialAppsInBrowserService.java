@@ -13,6 +13,7 @@ public class SocialAppsInBrowserService {
     private final SocialAppsInBrowserRepository socialAppsInBrowserRepository;
 
     public void create(List<SocialAppsInBrowserCreateRequest> requests, JsonEntity save) {
+        if (requests.isEmpty()) {return;}
         for (SocialAppsInBrowserCreateRequest request : requests) {
             SocialAppsInBrowser social = new SocialAppsInBrowser();
             social.setName(request.getName());

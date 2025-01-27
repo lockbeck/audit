@@ -5,6 +5,7 @@ import com.lockbeck.demo.Response;
 import com.lockbeck.entities.audit.AuditEntity;
 import com.lockbeck.entities.audit.AuditService;
 import com.lockbeck.entities.json.antivirus.Antivirus;
+import com.lockbeck.entities.json.antivirus.AntivirusDTO;
 import com.lockbeck.entities.json.antivirus.AntivirusRepository;
 import com.lockbeck.entities.json.antivirus.AntivirusService;
 import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowser;
@@ -15,6 +16,7 @@ import com.lockbeck.entities.json.usb.UsbRepository;
 import com.lockbeck.entities.json.usb.UsbService;
 import com.lockbeck.exceptions.NotFoundException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblWidth;
@@ -72,7 +74,7 @@ public class JsonService {
         socialAppsInBrowserService.create(request.getSocialAppsInBrowser(), save);
 
     }*/
-    private static final String JSON_FOLDER_PATH = "E:\\files";
+    private static final String JSON_FOLDER_PATH = "E:\\Auditor\\files";
 
 
 
@@ -123,18 +125,18 @@ public class JsonService {
         List<JsonEntity> all = loadEntitiesFromFolder();
         double total = all.size();
 
-        double hasRemoteAccess = 0;
-        double adminTrue = 0;
-        double noFirewall = 0;
-        double noAntivirus = 0;
         double noUps = 0;
-        double illegalSoftware = 0;
-        double oldOs = 0;
-        double noAntivirusLicense = 0;
-        double noPlomba = 0;
         double hasInternet = 0;
         double hasThreeGModem = 0;
+        double adminTrue = 0;
+        double hasRemoteAccess = 0;
+        double illegalSoftware = 0;
+        double oldOs = 0;
+        double noFirewall = 0;
+        double noAntivirus = 0;
+        double noAntivirusLicense = 0;
         double hasAntivirusPsw = 0;
+        double noPlomba = 0;
 
 
         HashMap<String, String> remoteAccessMap = new HashMap<>();
@@ -150,7 +152,10 @@ public class JsonService {
         for (JsonEntity jsonEntity : all) {
             if (jsonEntity.getUps().equals(Boolean.FALSE)) {
                 noUps++;
-                upsMap.put(jsonEntity.getMac(), jsonEntity.getName());
+                upsMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
+                       " ":jsonEntity.getMac(),
+                        jsonEntity.getName()==null||jsonEntity.getName().isEmpty()||jsonEntity.getName().isBlank()?
+                               " ":jsonEntity.getName());
             }
 
             if (jsonEntity.getInternet().equals(Boolean.TRUE)) {
@@ -158,15 +163,26 @@ public class JsonService {
             }
             if (jsonEntity.getThreeGModem().equals(Boolean.TRUE)) {
                 hasThreeGModem++;
-                threeGModemMap.put(jsonEntity.getMac(), jsonEntity.getName());
+                threeGModemMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
+                       " ":jsonEntity.getMac(),
+                        jsonEntity.getName()==null||jsonEntity.getName().isEmpty()||jsonEntity.getName().isBlank()?
+                               " ":jsonEntity.getName());
             }
             if (jsonEntity.getAdminRight().equals("Cheklanmagan")) {
                 adminTrue++;
-                adminMap.put(jsonEntity.getMac(), jsonEntity.getName());
+                adminMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
+                               " ":jsonEntity.getMac(),
+                        jsonEntity.getName()==null||jsonEntity.getName().isEmpty()||jsonEntity.getName().isBlank()?
+                               " ":jsonEntity.getName());
             }
+            String empMac = "";
             if (jsonEntity.getRemoteAccess().equals(Boolean.TRUE)) {
                 hasRemoteAccess++;
-                remoteAccessMap.put(jsonEntity.getMac(), jsonEntity.getName());
+                remoteAccessMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
+                        " ":jsonEntity.getMac(),
+                        jsonEntity.getName()==null||jsonEntity.getName().isEmpty()||jsonEntity.getName().isBlank()?
+                                " ":jsonEntity.getName());
+
             }
             boolean equal = false;
             if (!jsonEntity.getInstalledApps().isEmpty()) {
@@ -174,7 +190,10 @@ public class JsonService {
                     for (String software : ILLEGAL_SOFTWARES) {
                         if (installedApp.equalsIgnoreCase(software)) {
                             illegalSoftware++;
-                            illSoftMap.put(jsonEntity.getMac(), jsonEntity.getName());
+                            illSoftMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
+                        " ":jsonEntity.getMac(),
+                        jsonEntity.getName()==null||jsonEntity.getName().isEmpty()||jsonEntity.getName().isBlank()?
+                                " ":jsonEntity.getName());
                             equal = true;
                             break;
                         }
@@ -192,18 +211,30 @@ public class JsonService {
                             || jsonEntity.getOs().toLowerCase().contains("windows xp")
             ) {
                 oldOs++;
-                oldOsMap.put(jsonEntity.getMac(), jsonEntity.getName());
+                oldOsMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
+                        " ":jsonEntity.getMac(),
+                        jsonEntity.getName()==null||jsonEntity.getName().isEmpty()||jsonEntity.getName().isBlank()?
+                                " ":jsonEntity.getName());
             }
             if (jsonEntity.getFirewall().equals("Ishga tushurilmagan")) {
                 noFirewall++;
-                firewallMap.put(jsonEntity.getMac(), jsonEntity.getName());
-            }
-            if (jsonEntity.getAntivirus().isEmpty()&&jsonEntity.getHasAntivirusPsw().equals(Boolean.FALSE)) {
-                noAntivirus++;
-                antivirusMap.put(jsonEntity.getMac(), jsonEntity.getName());
+                firewallMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
+                        " ":jsonEntity.getMac(),
+                        jsonEntity.getName()==null||jsonEntity.getName().isEmpty()||jsonEntity.getName().isBlank()?
+                                " ":jsonEntity.getName());
             }
 
-            if (jsonEntity.getHasLicence().equals(Boolean.FALSE)) {
+            if (jsonEntity.getAntivirus().isEmpty()||
+                    (jsonEntity.getAntivirus().size()==1&&
+                            jsonEntity.getAntivirus().get(0).getName().equals("Windows Defender"))){
+                noAntivirus++;
+                antivirusMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
+                        " ":jsonEntity.getMac(),
+                        jsonEntity.getName()==null||jsonEntity.getName().isEmpty()||jsonEntity.getName().isBlank()?
+                                " ":jsonEntity.getName());
+            }
+
+            if (jsonEntity.getHasLicence()==null||jsonEntity.getHasLicence().equals(Boolean.FALSE)) {
                 noAntivirusLicense++;
             }
             if (jsonEntity.getPlomba().equals(Boolean.FALSE)) {
@@ -211,7 +242,10 @@ public class JsonService {
             }
             if (jsonEntity.getHasAntivirusPsw().equals(Boolean.FALSE)) {
                 hasAntivirusPsw++;
-                antivirusPswMap.put(jsonEntity.getMac(), jsonEntity.getName());
+                antivirusPswMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
+                        " ":jsonEntity.getMac(),
+                        jsonEntity.getName()==null||jsonEntity.getName().isEmpty()||jsonEntity.getName().isBlank()?
+                                " ":jsonEntity.getName());
             }
         }
 
@@ -738,13 +772,13 @@ public class JsonService {
         return new Response(200,"success");
     }
 
-    public Response create(JsonCreateRequest dto) {
+    public Response create(JsonCreateRequest dto,Integer auditId) {
         JsonEntity entity = new JsonEntity();
-        entity.setIpAddress(dto.getIpAddress());
-        entity.setMac(dto.getMac());
-        entity.setName(dto.getName());
-        entity.setOs(dto.getOs());
-        entity.setCpu(dto.getCpu());
+        entity.setIpAddress(dto.getIpAddress()==null?"":dto.getIpAddress());
+        entity.setMac(dto.getMac()==null?"":dto.getMac());
+        entity.setName(dto.getName()==null?"":dto.getName());
+        entity.setOs(dto.getOs()==null?"":dto.getOs());
+        entity.setCpu(dto.getCpu()==null?"":dto.getCpu());
         entity.setRam(dto.getRam());
         entity.setLocation(dto.getLocation());
         entity.setRemoteAccess(dto.getRemoteAccess());
@@ -764,11 +798,17 @@ public class JsonService {
         entity.setSocialAppsInDesktop(dto.getSocialAppsInDesktop());
 
         entity.setHasAntivirusPsw(dto.getHasAntivirusPsw());
-        jsonRepository.save(entity);
-        antivirusService.create(dto.getAntivirus(),entity);
+        entity.setAudit(auditService.get(auditId));
+        JsonEntity save = jsonRepository.save(entity);
+        antivirusService.create(dto.getAntivirus(), entity);
         usbService.create(dto.getUsb(),entity);
         socialAppsInBrowserService.create(dto.getSocialAppsInBrowser(),entity);
 
-        return new Response(200,"success");
+        JsonDTO jsonDTO = getJsonDTO(save);
+
+
+        //todo json qili qaytarish frontga
+
+        return new Response(200,"success",jsonDTO);
     }
 }

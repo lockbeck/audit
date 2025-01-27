@@ -15,6 +15,7 @@ public class AntivirusService {
     private final AntivirusRepository antivirusRepository;
 
     public void create(List<AntivirusCreateRequest> requests, JsonEntity save) {
+        if(requests.isEmpty()) return;
         for (AntivirusCreateRequest request : requests) {
             Antivirus antivirus = new Antivirus();
             antivirus.setName(request.getName());

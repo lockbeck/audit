@@ -6,9 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AntivirusCreateRequest {
-    public String Name;
+    public String name;
 
-    public String Status;
+    public String status;
 
-    public String UpdatedAt;
+    public String updatedAt;
 }

@@ -46,9 +46,9 @@ public class JsonController {
         return ResponseEntity.ok(jsonService.processJsonFiles(jsonFiles,auditId));
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Response> create(@RequestBody JsonCreateRequest dto) {
-        return ResponseEntity.ok(jsonService.create(dto));
+    @PostMapping("/create/{auditId}")
+    public ResponseEntity<Response> create(@RequestBody JsonCreateRequest dto,@PathVariable("auditId")Integer auditId) {
+        return ResponseEntity.ok(jsonService.create(dto,auditId));
     }
 
 
