@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import javax.xml.stream.events.DTD;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,9 +27,10 @@ public class AntivirusService {
         }
     }
 
-    public List<AntivirusDTO> getList(List<Antivirus> antivirus) {
+    public List<AntivirusDTO> getList(Integer jsonId ) {
+        List<Antivirus> byJsonId = antivirusRepository.findByJsonId(jsonId);
         List<AntivirusDTO> dtos = new ArrayList<>();
-        antivirus.forEach(entity -> {
+        byJsonId.forEach(entity -> {
             AntivirusDTO build = AntivirusDTO.builder()
                     .name(entity.getName())
                     .status(entity.getStatus())

@@ -24,9 +24,10 @@ public class SocialAppsInBrowserService {
         }
     }
 
-    public List<SocialAppsInBrowserDTO> getList(List<SocialAppsInBrowser> socialAppsInBrowser) {
+    public List<SocialAppsInBrowserDTO> getList(Integer jsonId) {
+        List<SocialAppsInBrowser> byJsonId = socialAppsInBrowserRepository.findByJsonId(jsonId);
         List<SocialAppsInBrowserDTO> socialAppsInBrowserDTOs = new ArrayList<>();
-        for (SocialAppsInBrowser socialApp : socialAppsInBrowser) {
+        for (SocialAppsInBrowser socialApp : byJsonId) {
             SocialAppsInBrowserDTO build = SocialAppsInBrowserDTO.builder()
                     .name(socialApp.getName())
                     .url(socialApp.getUrl())

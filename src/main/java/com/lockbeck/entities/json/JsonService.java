@@ -4,16 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lockbeck.demo.Response;
 import com.lockbeck.entities.audit.AuditEntity;
 import com.lockbeck.entities.audit.AuditService;
-import com.lockbeck.entities.json.antivirus.Antivirus;
-import com.lockbeck.entities.json.antivirus.AntivirusDTO;
-import com.lockbeck.entities.json.antivirus.AntivirusRepository;
-import com.lockbeck.entities.json.antivirus.AntivirusService;
+import com.lockbeck.entities.json.antivirus.*;
 import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowser;
 import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowserRepository;
 import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowserService;
 import com.lockbeck.entities.json.usb.USB;
 import com.lockbeck.entities.json.usb.UsbRepository;
 import com.lockbeck.entities.json.usb.UsbService;
+import com.lockbeck.entities.report.ReportService;
 import com.lockbeck.exceptions.NotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Null;
@@ -75,7 +73,7 @@ public class JsonService {
 
     }*/
     private static final String JSON_FOLDER_PATH = "E:\\Auditor\\files";
-
+    private final ReportService reportService;
 
 
     @Transactional
@@ -240,7 +238,7 @@ public class JsonService {
             if (jsonEntity.getPlomba().equals(Boolean.FALSE)) {
                 noPlomba++;
             }
-            if (jsonEntity.getHasAntivirusPsw().equals(Boolean.FALSE)) {
+            if (!jsonEntity.getAntivirus().isEmpty()&&jsonEntity.getHasAntivirusPsw().equals(Boolean.FALSE)) {
                 hasAntivirusPsw++;
                 antivirusPswMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
                         " ":jsonEntity.getMac(),
@@ -401,7 +399,7 @@ public class JsonService {
         );
 
         paragraph(document,
-                "\t1.  Oʻz DSt ISO/IEC 27002:2016 davlat standartining 6.2.2 va 9.1.2 bandlariga muvofiq potensial zaif masofadan ulanish vositalarini o‘chirib qo‘yish yoki ulanishdagi xatoliklarni minimumga tushirgan holda masofadan ishlash uchun mo‘ljallangan maxsus vositalardan foydalanish (4-jadval).",
+                "\t1.  Oʻz DSt ISO/IEC 27002:2016 davlat standartining 6.2.2 va 9.1.2 bandlariga muvofiq potensial zaif masofadan ulanish vositalarini o‘chirib qo‘yish yoki ulanishdagi xatoliklarni minimumga tushirgan holda masofadan ishlash uchun mo‘ljallangan maxsus vositalardan foydalanish.",
                 false,
                 180,
                 "0000FF",
@@ -632,6 +630,7 @@ public class JsonService {
         // FileSystemResource dan foydalanib, resursni qaytarish
         return new FileSystemResource(filePath.toFile());
     }
+
     private List<JsonEntity> loadEntitiesFromFolder() throws IOException {
         List<JsonEntity> entities = new ArrayList<>();
         File folder = new File(JSON_FOLDER_PATH);
@@ -732,22 +731,23 @@ public class JsonService {
                 .remoteAccess(entity.getRemoteAccess())
                 .adminRight(entity.getAdminRight())
                 .firewall(entity.getFirewall())
-                .antivirus(antivirusService.getList(entity.getAntivirus()))
+                .antivirus(antivirusService.getList(entity.getId()))
                 .hasLicence(entity.getHasLicence())
                 .threeGModem(entity.getThreeGModem())
                 .internet(entity.getInternet())
                 .networkStatus(entity.getNetworkStatus())
-                .usb(usbService.getList(entity.getUsb()))
+                .usb(usbService.getList(entity.getId()))
                 .dvd(entity.getDvd())
                 .startUpApps(entity.getStartUpApps())
                 .installedApps(entity.getInstalledApps())
                 .ups(entity.getUps())
                 .plomba(entity.getPlomba())
                 .socialAppsInDesktop(entity.getSocialAppsInDesktop())
-                .socialAppsInBrowser(socialAppsInBrowserService.getList(entity.getSocialAppsInBrowser()))
+                .socialAppsInBrowser(socialAppsInBrowserService.getList(entity.getId()))
                 .hasAntivirusPsw(entity.getHasAntivirusPsw())
                 .build();
     }
+
 
 
     public Response delete(Integer jsonId) {
@@ -800,15 +800,26 @@ public class JsonService {
         entity.setHasAntivirusPsw(dto.getHasAntivirusPsw());
         entity.setAudit(auditService.get(auditId));
         JsonEntity save = jsonRepository.save(entity);
-        antivirusService.create(dto.getAntivirus(), entity);
-        usbService.create(dto.getUsb(),entity);
-        socialAppsInBrowserService.create(dto.getSocialAppsInBrowser(),entity);
+        for (AntivirusCreateRequest antivirus : dto.getAntivirus()) {
+            System.out.println(antivirus.getName());
+        }
+        antivirusService.create(dto.getAntivirus(), save);
+        usbService.create(dto.getUsb(),save);
+        socialAppsInBrowserService.create(dto.getSocialAppsInBrowser(),save);
 
-        JsonDTO jsonDTO = getJsonDTO(save);
+        JsonDTO jsonDTO = getJsonDTO(get(save.getId()));
+        System.out.println(jsonDTO);
 
 
         //todo json qili qaytarish frontga
 
         return new Response(200,"success",jsonDTO);
+    }
+    private JsonEntity get(Integer jsonId) {
+        Optional<JsonEntity> byId = jsonRepository.findById(jsonId);
+        if (byId.isEmpty()) {
+            throw new NotFoundException("Json file topilmadi");
+        }
+        return byId.get();
     }
 }

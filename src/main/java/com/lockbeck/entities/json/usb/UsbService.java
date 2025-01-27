@@ -24,15 +24,16 @@ public class UsbService {
         }
     }
 
-    public List<USBDTO> getList(List<USB> usb) {
+    public List<USBDTO> getList(Integer jsonId) {
+        List<USB> byJsonId = usbRepository.findByJsonId(jsonId);
         List<USBDTO> dtos = new ArrayList<>();
 
-        usb.forEach(usb1 -> {
+        byJsonId.forEach(usb -> {
             USBDTO build = USBDTO.builder()
-                    .deviceId(usb1.getDeviceId())
-                    .pNPDeviceID(usb1.getPNPDeviceID())
-                    .description(usb1.getDescription())
-                    .id(usb1.getId())
+                    .deviceId(usb.getDeviceId())
+                    .pNPDeviceID(usb.getPNPDeviceID())
+                    .description(usb.getDescription())
+                    .id(usb.getId())
                     .build();
             dtos.add(build);
         });
