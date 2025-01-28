@@ -16,6 +16,7 @@ import com.lockbeck.exceptions.NotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblWidth;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblWidth;
@@ -72,7 +73,7 @@ public class JsonService {
         socialAppsInBrowserService.create(request.getSocialAppsInBrowser(), save);
 
     }*/
-    private static final String JSON_FOLDER_PATH = "E:\\Auditor\\files";
+    private static final String JSON_FOLDER_PATH = "X:\\Attestatsiya va sertifikatsiya departamenti\\ОТДЕЛ АТТЕСТАЦИИ КИИ\\2025\\15. Изучения\\Интеграция ўрганиш\\NGMK";
     private final ReportService reportService;
 
 
@@ -112,6 +113,8 @@ public class JsonService {
                 antivirusRepository.saveAll(jsonEntity.getAntivirus());
                 usbRepository.saveAll(jsonEntity.getUsb());
                 socialAppsInBrowserRepository.saveAll(jsonEntity.getSocialAppsInBrowser());
+            }else{
+                throw new BadRequestException("Json file already exists");
             }
         }
         return new Response(200, "success");
@@ -120,7 +123,8 @@ public class JsonService {
 
     public Resource createWordReport(Integer auditId) throws IOException {
 
-        List<JsonEntity> all = loadEntitiesFromFolder();
+//        List<JsonEntity> all = loadEntitiesFromFolder(auditId);
+        List<JsonEntity> all = jsonRepository.findAllByAuditId(auditId);
         double total = all.size();
 
         double noUps = 0;
@@ -232,18 +236,28 @@ public class JsonService {
                                 " ":jsonEntity.getName());
             }
 
-            if (jsonEntity.getHasLicence()==null||jsonEntity.getHasLicence().equals(Boolean.FALSE)) {
-                noAntivirusLicense++;
+            if(!(jsonEntity.getAntivirus().isEmpty()||
+                    (jsonEntity.getAntivirus().size()==1&&
+                            jsonEntity.getAntivirus().get(0).getName().equals("Windows Defender")))){
+
+                if ((jsonEntity.getHasLicence()==null||jsonEntity.getHasLicence().equals(Boolean.FALSE))) {
+                    noAntivirusLicense++;
+                }
             }
             if (jsonEntity.getPlomba().equals(Boolean.FALSE)) {
                 noPlomba++;
             }
-            if (!jsonEntity.getAntivirus().isEmpty()&&jsonEntity.getHasAntivirusPsw().equals(Boolean.FALSE)) {
-                hasAntivirusPsw++;
-                antivirusPswMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
-                        " ":jsonEntity.getMac(),
-                        jsonEntity.getName()==null||jsonEntity.getName().isEmpty()||jsonEntity.getName().isBlank()?
-                                " ":jsonEntity.getName());
+            if(!(jsonEntity.getAntivirus().isEmpty()||
+                    (jsonEntity.getAntivirus().size()==1&&
+                            jsonEntity.getAntivirus().get(0).getName().equals("Windows Defender")))){
+
+                if (jsonEntity.getHasAntivirusPsw().equals(Boolean.FALSE)) {
+                    hasAntivirusPsw++;
+                    antivirusPswMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
+                                    " ":jsonEntity.getMac(),
+                            jsonEntity.getName()==null||jsonEntity.getName().isEmpty()||jsonEntity.getName().isBlank()?
+                                    " ":jsonEntity.getName());
+                }
             }
         }
 
