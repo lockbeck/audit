@@ -14,7 +14,6 @@ import com.lockbeck.entities.json.usb.UsbService;
 import com.lockbeck.entities.report.ReportService;
 import com.lockbeck.exceptions.NotFoundException;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.apache.poi.xwpf.usermodel.*;
@@ -74,7 +73,6 @@ public class JsonService {
 
     }*/
     private static final String JSON_FOLDER_PATH = "X:\\Attestatsiya va sertifikatsiya departamenti\\ОТДЕЛ АТТЕСТАЦИИ КИИ\\2025\\15. Изучения\\Интеграция ўрганиш\\NGMK";
-    private final ReportService reportService;
 
 
     @Transactional
@@ -177,7 +175,6 @@ public class JsonService {
                         jsonEntity.getName()==null||jsonEntity.getName().isEmpty()||jsonEntity.getName().isBlank()?
                                " ":jsonEntity.getName());
             }
-            String empMac = "";
             if (jsonEntity.getRemoteAccess().equals(Boolean.TRUE)) {
                 hasRemoteAccess++;
                 remoteAccessMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
