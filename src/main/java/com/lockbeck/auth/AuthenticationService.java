@@ -9,6 +9,7 @@ import com.lockbeck.entities.user.UserEntity;
 import com.lockbeck.entities.user.UserRepository;
 import com.lockbeck.exceptions.BadRequestException;
 import com.lockbeck.exceptions.NotFoundException;
+import com.lockbeck.entities.audit_log.AuditLogService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -32,12 +33,16 @@ public class AuthenticationService {
 
     private final UserRepository userRepository;
 
+    private final AuditLogService auditLogService;
+
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         Optional<UserEntity> byId = userRepository.findByUsernameAndDeletedFalse(request.getEmail());
 
         if (byId.isEmpty()) {
+            auditLogService.logUserAction(request.getEmail(), "login failed");
             throw new NotFoundException("Login xato kiritildi");
+
         }
         UserEntity user = byId.get();
         passwordCheck(request, user);
@@ -54,6 +59,7 @@ public class AuthenticationService {
         repository.save(user);
 
         tokenRepository.deleteExpired();
+        auditLogService.logUserAction(user.getName(),"log in successfully");
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .build();
@@ -63,6 +69,7 @@ public class AuthenticationService {
         boolean matches = passwordEncoder.matches(request.getPassword(), userEntity.getPassword());
         if (userEntity.getIsLocked().equals(Boolean.TRUE)) {
             if (userEntity.getLockedDate().after(Date.from(Instant.now()))) {
+                auditLogService.logUserAction(userEntity.getUsername(),"blocked user trying to log in");
                 throw new BadRequestException("user vaqtincha bloklangan keyinroq harakat qilib ko`ring");
 
             } else {
@@ -76,11 +83,13 @@ public class AuthenticationService {
             userEntity.setIsLocked(Boolean.TRUE);
             userEntity.setLockedDate(Date.from(Instant.now().plusSeconds(60)));
             repository.save(userEntity);
+            auditLogService.logUserAction(userEntity.getUsername(),"user blocked");
             throw new BadRequestException("parol bir necha martta xato kiritildi. keyinroq harakat qilib ko'ring");
         }
         if (!matches) {
             userEntity.setFailAttempt(userEntity.getFailAttempt() + 1);
             repository.save(userEntity);
+            auditLogService.logUserAction(userEntity.getUsername(),"password fail");
             throw new BadRequestException("Parol xato kiritildi");
 
         } else {

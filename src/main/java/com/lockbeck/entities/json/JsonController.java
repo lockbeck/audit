@@ -1,6 +1,7 @@
 package com.lockbeck.entities.json;
 
 import com.lockbeck.demo.Response;
+import com.lockbeck.exceptions.BadRequestException;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,8 @@ public class JsonController {
                         file.transferTo(tempFile);
                         return tempFile;
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        System.out.println(e.getMessage()+"controllerda try catchga tushdi");
+                        throw new BadRequestException("controllerda try catchga tushdi");
                     }
                 }).collect(Collectors.toList());
 

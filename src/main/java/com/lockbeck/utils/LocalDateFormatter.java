@@ -71,4 +71,23 @@ public class LocalDateFormatter {
             return null;
         }
     }
+    public String getStringDateTime(LocalDateTime date) {
+
+        if (date!=null) {
+
+
+            // Create a LocalDateTime object by combining the LocalDate with midnight time
+
+
+            // Define the formatter to format the output string
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
+            // Format the LocalDateTime object into a string
+            String formattedDate = date.format(formatter);
+            return formattedDate;
+        }
+        else {
+            return null;
+        }
+    }
 }

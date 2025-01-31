@@ -3,6 +3,7 @@ package com.lockbeck.entities.subject;
 import com.lockbeck.entities.subject.type.SubjectTypeEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 
@@ -16,7 +17,10 @@ import java.util.UUID;
 @Entity
 public class SubjectEntity {
     @Id
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid2")
     private String id;
+
     private String name;
     private String address;
     private String phone;

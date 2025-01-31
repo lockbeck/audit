@@ -11,11 +11,10 @@ import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowserServic
 import com.lockbeck.entities.json.usb.USB;
 import com.lockbeck.entities.json.usb.UsbRepository;
 import com.lockbeck.entities.json.usb.UsbService;
-import com.lockbeck.entities.report.ReportService;
+import com.lockbeck.exceptions.BadRequestException;
 import com.lockbeck.exceptions.NotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblWidth;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblWidth;
@@ -72,11 +71,11 @@ public class JsonService {
         socialAppsInBrowserService.create(request.getSocialAppsInBrowser(), save);
 
     }*/
-    private static final String JSON_FOLDER_PATH = "X:\\Attestatsiya va sertifikatsiya departamenti\\ОТДЕЛ АТТЕСТАЦИИ КИИ\\2025\\15. Изучения\\Интеграция ўрганиш\\NGMK";
+    private static final String JSON_FOLDER_PATH = "X:\\Attestatsiya va sertifikatsiya departamenti\\ОТДЕЛ АТТЕСТАЦИИ КИИ\\2025\\15. Изучения\\navoiyazot\\NavoiyAzot AJ - Copy";
 
 
     @Transactional
-    public Response processJsonFiles(List<File> jsonFiles, Integer auditId) throws IOException {
+    public Response processJsonFiles(List<File> jsonFiles, Integer auditId)  {
         AuditEntity auditEntity = auditService.get(auditId);
 //        String name = auditEntity.getInLetter().getSubject().getName();
 //        File zipFile = Files.createTempFile(name+"_ishchi_stansiyalri" , ".zip").toFile();
@@ -103,7 +102,14 @@ public class JsonService {
 //        }
         for (File jsonFile : jsonFiles) {
 
-            JsonEntity jsonEntity = objectMapper.readValue(jsonFile, JsonEntity.class);
+            JsonEntity jsonEntity = new JsonEntity();
+            try {
+
+                 jsonEntity = objectMapper.readValue(jsonFile, JsonEntity.class);
+            }catch (Exception e){
+                System.out.println(e.getMessage()+"servisdagi try catch");
+                System.out.println(jsonEntity.getMac());
+            }
             jsonEntity.setAudit(auditEntity);
             if (jsonRepository.findByAuditIdAndMac(auditId, jsonEntity.getMac()).isEmpty()) {
 
@@ -111,8 +117,6 @@ public class JsonService {
                 antivirusRepository.saveAll(jsonEntity.getAntivirus());
                 usbRepository.saveAll(jsonEntity.getUsb());
                 socialAppsInBrowserRepository.saveAll(jsonEntity.getSocialAppsInBrowser());
-            }else{
-                throw new BadRequestException("Json file already exists");
             }
         }
         return new Response(200, "success");
@@ -121,8 +125,8 @@ public class JsonService {
 
     public Resource createWordReport(Integer auditId) throws IOException {
 
-//        List<JsonEntity> all = loadEntitiesFromFolder(auditId);
-        List<JsonEntity> all = jsonRepository.findAllByAuditId(auditId);
+        List<JsonEntity> all = loadEntitiesFromFolder(auditId);
+//        List<JsonEntity> all = jsonRepository.findAllByAuditId(auditId);
         double total = all.size();
 
         double noUps = 0;
@@ -150,7 +154,10 @@ public class JsonService {
         HashMap<String, String> antivirusPswMap = new HashMap<>();
 
         for (JsonEntity jsonEntity : all) {
-            if (jsonEntity.getUps().equals(Boolean.FALSE)) {
+            if (jsonEntity.getUps()==null||jsonEntity.getUps().equals(Boolean.FALSE)) {
+                if(jsonEntity.getUps()==null){
+                    System.out.println(jsonEntity.getMac());
+                }
                 noUps++;
                 upsMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
                        " ":jsonEntity.getMac(),
@@ -158,24 +165,36 @@ public class JsonService {
                                " ":jsonEntity.getName());
             }
 
-            if (jsonEntity.getInternet().equals(Boolean.TRUE)) {
+            if (jsonEntity.getInternet()==null||jsonEntity.getInternet().equals(Boolean.TRUE)) {
+                if(jsonEntity.getInternet()==null){
+                    System.out.println(jsonEntity.getMac());
+                }
                 hasInternet++;
             }
-            if (jsonEntity.getThreeGModem().equals(Boolean.TRUE)) {
+            if (jsonEntity.getThreeGModem()==null||jsonEntity.getThreeGModem().equals(Boolean.TRUE)) {
+                if(jsonEntity.getThreeGModem()==null){
+                    System.out.println(jsonEntity.getMac());
+                }
                 hasThreeGModem++;
                 threeGModemMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
                        " ":jsonEntity.getMac(),
                         jsonEntity.getName()==null||jsonEntity.getName().isEmpty()||jsonEntity.getName().isBlank()?
                                " ":jsonEntity.getName());
             }
-            if (jsonEntity.getAdminRight().equals("Cheklanmagan")) {
+            if (jsonEntity.getAdminRight()==null||jsonEntity.getAdminRight().equals("Cheklanmagan")) {
+                if(jsonEntity.getAdminRight()==null){
+                    System.out.println(jsonEntity.getMac());
+                }
                 adminTrue++;
                 adminMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
                                " ":jsonEntity.getMac(),
                         jsonEntity.getName()==null||jsonEntity.getName().isEmpty()||jsonEntity.getName().isBlank()?
                                " ":jsonEntity.getName());
             }
-            if (jsonEntity.getRemoteAccess().equals(Boolean.TRUE)) {
+            if (jsonEntity.getRemoteAccess()==null||jsonEntity.getRemoteAccess().equals(Boolean.TRUE)) {
+                if(jsonEntity.getRemoteAccess()==null){
+                    System.out.println(jsonEntity.getMac());
+                }
                 hasRemoteAccess++;
                 remoteAccessMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
                         " ":jsonEntity.getMac(),
@@ -204,18 +223,24 @@ public class JsonService {
             }
 
 
-            if (
+            if (jsonEntity.getOs()==null||
                     jsonEntity.getOs().toLowerCase().contains("windows 7")
                             || jsonEntity.getOs().toLowerCase().contains("windows 8")
                             || jsonEntity.getOs().toLowerCase().contains("windows xp")
             ) {
+                if(jsonEntity.getOs()==null){
+                    System.out.println(jsonEntity.getMac());
+                }
                 oldOs++;
                 oldOsMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
                         " ":jsonEntity.getMac(),
                         jsonEntity.getName()==null||jsonEntity.getName().isEmpty()||jsonEntity.getName().isBlank()?
                                 " ":jsonEntity.getName());
             }
-            if (jsonEntity.getFirewall().equals("Ishga tushurilmagan")) {
+            if (jsonEntity.getFirewall()==null||jsonEntity.getFirewall().equals("Ishga tushurilmagan")) {
+                if(jsonEntity.getFirewall()==null){
+                    System.out.println(jsonEntity.getMac());
+                }
                 noFirewall++;
                 firewallMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
                         " ":jsonEntity.getMac(),
@@ -227,21 +252,25 @@ public class JsonService {
                     (jsonEntity.getAntivirus().size()==1&&
                             jsonEntity.getAntivirus().get(0).getName().equals("Windows Defender"))){
                 noAntivirus++;
+                noAntivirusLicense++;
                 antivirusMap.put(jsonEntity.getMac()==null||jsonEntity.getMac().isEmpty()||jsonEntity.getMac().isBlank() ?
                         " ":jsonEntity.getMac(),
                         jsonEntity.getName()==null||jsonEntity.getName().isEmpty()||jsonEntity.getName().isBlank()?
                                 " ":jsonEntity.getName());
             }
 
-            if(!(jsonEntity.getAntivirus().isEmpty()||
+            /*if(!(jsonEntity.getAntivirus().isEmpty()||
                     (jsonEntity.getAntivirus().size()==1&&
                             jsonEntity.getAntivirus().get(0).getName().equals("Windows Defender")))){
 
                 if ((jsonEntity.getHasLicence()==null||jsonEntity.getHasLicence().equals(Boolean.FALSE))) {
                     noAntivirusLicense++;
                 }
-            }
-            if (jsonEntity.getPlomba().equals(Boolean.FALSE)) {
+            }*/
+            if (jsonEntity.getPlomba()==null||jsonEntity.getPlomba().equals(Boolean.FALSE)) {
+                if(jsonEntity.getPlomba()==null){
+                    System.out.println(jsonEntity.getMac());
+                }
                 noPlomba++;
             }
             if(!(jsonEntity.getAntivirus().isEmpty()||
@@ -642,7 +671,7 @@ public class JsonService {
         return new FileSystemResource(filePath.toFile());
     }
 
-    private List<JsonEntity> loadEntitiesFromFolder() throws IOException {
+    private List<JsonEntity> loadEntitiesFromFolder(Integer id) throws IOException {
         List<JsonEntity> entities = new ArrayList<>();
         File folder = new File(JSON_FOLDER_PATH);
 

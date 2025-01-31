@@ -24,32 +24,41 @@ public class JsonEntity {
     private Integer id;
 
     @JsonProperty("IpAdress")
+    @Column(columnDefinition = "varchar(10000)")
     private String ipAddress;
 
     @JsonProperty("MAC")
+    @Column(columnDefinition = "varchar(10000)")
     private String mac;
 
     @JsonProperty("NameComputer")
+    @Column(columnDefinition = "varchar(10000)")
     private String name;
 
     @JsonProperty("OS")
+    @Column(columnDefinition = "varchar(10000)")
     private String os;
 
     @JsonProperty("CPU")
+    @Column(columnDefinition = "varchar(10000)")
     private String cpu;
 
     @JsonProperty("RAM")
+    @Column(columnDefinition = "varchar(10000)")
     private String ram;
     @JsonProperty("Location")
+    @Column(columnDefinition = "varchar(10000)")
     private String location;
 
     @JsonProperty("RemoteAccess")
     private Boolean remoteAccess;
 
     @JsonProperty("IsAdmin")
+    @Column(columnDefinition = "varchar(10000)")
     private String adminRight;
 
     @JsonProperty("Firewall")
+    @Column(columnDefinition = "varchar(10000)")
     private String firewall;
 
     @JsonProperty("Antiviruses")

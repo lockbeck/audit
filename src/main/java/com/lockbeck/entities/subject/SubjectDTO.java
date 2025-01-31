@@ -3,6 +3,8 @@ package com.lockbeck.entities.subject;
 
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @AllArgsConstructor
