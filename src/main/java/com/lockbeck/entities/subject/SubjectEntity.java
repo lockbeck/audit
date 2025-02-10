@@ -17,8 +17,6 @@ import java.util.UUID;
 @Entity
 public class SubjectEntity {
     @Id
-    @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name="system-uuid", strategy = "uuid2")
     private String id;
 
     private String name;
@@ -30,6 +28,11 @@ public class SubjectEntity {
     @JoinColumn(name = "subject_type_id",referencedColumnName = "id")
     private SubjectTypeEntity type;
 
-
+    @PrePersist
+    public void prePersist() {
+        if (id == null) {
+            id = UUID.randomUUID().toString();  // Generates a new UUID when persisting.
+        }
+    }
     // Getters and Setters
 }
