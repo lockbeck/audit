@@ -1,7 +1,6 @@
 package com.lockbeck.entities.json.social_app_in_browser;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lockbeck.entities.json.JsonEntity;
 import jakarta.persistence.*;
 import lombok.*;
