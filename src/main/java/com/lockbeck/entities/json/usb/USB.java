@@ -1,7 +1,6 @@
 package com.lockbeck.entities.json.usb;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lockbeck.entities.json.JsonEntity;
 import jakarta.persistence.*;
 import lombok.*;
