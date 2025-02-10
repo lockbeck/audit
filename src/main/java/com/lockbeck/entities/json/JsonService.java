@@ -765,13 +765,8 @@ public class JsonService {
                 .build();
     }
 
-    public Response delete(Integer jsonId) {
+    public void delete(JsonEntity jsonEntity) {
 
-        Optional<JsonEntity> byId = jsonRepository.findById(jsonId);
-        if (byId.isEmpty()) {
-            throw new NotFoundException("Json file topilmadi");
-        }
-        JsonEntity jsonEntity = byId.get();
         for (Antivirus antivirus : jsonEntity.getAntivirus()) {
             antivirusService.delete(antivirus);
         }
@@ -781,10 +776,8 @@ public class JsonService {
         for (SocialAppsInBrowser socialAppsInBrowser : jsonEntity.getSocialAppsInBrowser()) {
             socialAppsInBrowserService.delete(socialAppsInBrowser);
         }
+        jsonEntity.setAudit(null);
         jsonRepository.delete(jsonEntity);
-
-
-        return new Response(200,"success");
     }
 
     public Response create(JsonCreateRequest dto,Integer auditId) {
@@ -871,5 +864,13 @@ public class JsonService {
             throw new NotFoundException("Json file topilmadi");
         }
         return byId.get();
+    }
+
+    public Response deleteIds(List<Integer> jsonIdList) {
+        jsonIdList.forEach(jsonId -> {
+            JsonEntity jsonEntity = get(jsonId);
+            delete(jsonEntity);
+        });
+        return new Response(200,"success");
     }
 }

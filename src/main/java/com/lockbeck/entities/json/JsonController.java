@@ -79,15 +79,15 @@ public class JsonController {
     }
 
     @GetMapping("/list/{auditId}")
-    public ResponseEntity<?> list(@PathVariable("auditId")Integer auditId) throws IOException {
+    public ResponseEntity<?> list(@PathVariable("auditId")Integer auditId) {
 
       return ResponseEntity.ok(jsonService.list(auditId));
 
     }
 
-    @DeleteMapping("/delete/{jsonId}")
-    public ResponseEntity<Response> delete(@PathVariable("jsonId")Integer auditId) throws IOException {
-        return ResponseEntity.ok(jsonService.delete(auditId));
+    @DeleteMapping("/deleteIds")
+    public ResponseEntity<Response> delete(@RequestBody List<Integer> jsonIdList) throws IOException {
+        return ResponseEntity.ok(jsonService.deleteIds(jsonIdList));
     }
 
 }
