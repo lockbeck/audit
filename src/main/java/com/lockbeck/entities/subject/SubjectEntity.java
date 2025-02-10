@@ -3,7 +3,6 @@ package com.lockbeck.entities.subject;
 import com.lockbeck.entities.subject.type.SubjectTypeEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 

@@ -1,10 +1,7 @@
 package com.lockbeck.entities.json;
 
-import com.lockbeck.entities.json.antivirus.AntivirusCreateRequest;
 import com.lockbeck.entities.json.antivirus.AntivirusUpdateRequest;
-import com.lockbeck.entities.json.social_app_in_browser.SocialAppsInBrowserCreateRequest;
 import com.lockbeck.entities.json.social_app_in_browser.SocialAppsInBrowserUpdateRequest;
-import com.lockbeck.entities.json.usb.USBCreateRequest;
 import com.lockbeck.entities.json.usb.USBUpdateRequest;
 import lombok.Getter;
 import lombok.Setter;
