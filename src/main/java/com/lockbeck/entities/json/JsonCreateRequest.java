@@ -17,6 +17,7 @@ public class JsonCreateRequest {
     private String mac;
     private String name;
     private String os;
+    private String systemType;
     private String cpu;
     private String ram;
     private String location;

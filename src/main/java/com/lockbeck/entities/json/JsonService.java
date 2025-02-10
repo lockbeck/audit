@@ -765,6 +765,7 @@ public class JsonService {
                 .mac(entity.getMac())
                 .name(entity.getName())
                 .os(entity.getOs())
+                .systemType(entity.getSystemType())
                 .cpu(entity.getCpu())
                 .ram(entity.getRam())
                 .location(entity.getLocation())
@@ -818,6 +819,7 @@ public class JsonService {
         entity.setMac(dto.getMac()==null?"":dto.getMac());
         entity.setName(dto.getName()==null?"":dto.getName());
         entity.setOs(dto.getOs()==null?"":dto.getOs());
+        entity.setSystemType(dto.getSystemType()==null?"":dto.getSystemType());
         entity.setCpu(dto.getCpu()==null?"":dto.getCpu());
         entity.setRam(dto.getRam());
         entity.setLocation(dto.getLocation());
@@ -855,6 +857,7 @@ public class JsonService {
 
         return new Response(200,"success",jsonDTO);
     }
+
     private JsonEntity get(Integer jsonId) {
         Optional<JsonEntity> byId = jsonRepository.findById(jsonId);
         if (byId.isEmpty()) {

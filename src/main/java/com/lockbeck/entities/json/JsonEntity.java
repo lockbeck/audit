@@ -39,6 +39,9 @@ public class JsonEntity {
     @Column(columnDefinition = "varchar(10000)")
     private String os;
 
+    @JsonProperty("systemType")
+    private String systemType;
+
     @JsonProperty("CPU")
     @Column(columnDefinition = "varchar(10000)")
     private String cpu;
