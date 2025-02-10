@@ -1,7 +1,7 @@
 package com.lockbeck.entities.json;
 
 import com.lockbeck.entities.json.antivirus.AntivirusDTO;
-import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowserDTO;
+import com.lockbeck.entities.json.social_app_in_browser.SocialAppsInBrowserDTO;
 import com.lockbeck.entities.json.usb.USBDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -53,6 +53,11 @@ public class JsonController {
         return ResponseEntity.ok(jsonService.create(dto,auditId));
     }
 
+    @PostMapping("/update/{jsonId}")
+    public ResponseEntity<Response> update(@RequestBody JsonUpdateRequest dto,@PathVariable("jsonId")Integer auditId) {
+        return ResponseEntity.ok(jsonService.update(dto,auditId));
+    }
+
 
 
     @GetMapping("/report/{auditId}")

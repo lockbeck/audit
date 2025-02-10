@@ -5,9 +5,9 @@ import com.lockbeck.demo.Response;
 import com.lockbeck.entities.audit.AuditEntity;
 import com.lockbeck.entities.audit.AuditService;
 import com.lockbeck.entities.json.antivirus.*;
-import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowser;
-import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowserRepository;
-import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowserService;
+import com.lockbeck.entities.json.social_app_in_browser.SocialAppsInBrowser;
+import com.lockbeck.entities.json.social_app_in_browser.SocialAppsInBrowserRepository;
+import com.lockbeck.entities.json.social_app_in_browser.SocialAppsInBrowserService;
 import com.lockbeck.entities.json.usb.USB;
 import com.lockbeck.entities.json.usb.UsbRepository;
 import com.lockbeck.entities.json.usb.UsbService;
@@ -76,29 +76,6 @@ public class JsonService {
     @Transactional
     public Response processJsonFiles(List<File> jsonFiles, Integer auditId)  {
         AuditEntity auditEntity = auditService.get(auditId);
-//        String name = auditEntity.getInLetter().getSubject().getName();
-//        File zipFile = Files.createTempFile(name+"_ishchi_stansiyalri" , ".zip").toFile();
-//
-//        try (FileOutputStream fos = new FileOutputStream(zipFile);
-//             ZipOutputStream zipOut = new ZipOutputStream(fos)) {
-//
-//            for (File jsonFile : jsonFiles) {
-//                try (FileInputStream fis = new FileInputStream(jsonFile)) {
-//                    ZipEntry zipEntry = new ZipEntry(jsonFile.getName());
-//                    zipOut.putNextEntry(zipEntry);
-//
-//                    byte[] bytes = new byte[1024];
-//                    int length;
-//                    while ((length = fis.read(bytes)) >= 0) {
-//                        zipOut.write(bytes, 0, length);
-//                    }
-//
-//                    zipOut.closeEntry();
-//                }
-//            }
-//        }catch (IOException e) {
-//            System.out.println("saqlanmadi");
-//        }
         for (File jsonFile : jsonFiles) {
 
             JsonEntity jsonEntity = new JsonEntity();
@@ -788,8 +765,6 @@ public class JsonService {
                 .build();
     }
 
-
-
     public Response delete(Integer jsonId) {
 
         Optional<JsonEntity> byId = jsonRepository.findById(jsonId);
@@ -841,20 +816,53 @@ public class JsonService {
         entity.setHasAntivirusPsw(dto.getHasAntivirusPsw());
         entity.setAudit(auditService.get(auditId));
         JsonEntity save = jsonRepository.save(entity);
-        for (AntivirusCreateRequest antivirus : dto.getAntivirus()) {
-            System.out.println(antivirus.getName());
-        }
+
         antivirusService.create(dto.getAntivirus(), save);
         usbService.create(dto.getUsb(),save);
         socialAppsInBrowserService.create(dto.getSocialAppsInBrowser(),save);
 
         JsonDTO jsonDTO = getJsonDTO(get(save.getId()));
-        System.out.println(jsonDTO);
-
 
         //todo json qili qaytarish frontga
 
         return new Response(200,"success",jsonDTO);
+    }
+
+    public Response update(JsonUpdateRequest dto,Integer jsonId){
+        JsonEntity entity = get(jsonId);
+        entity.setIpAddress(dto.getIpAddress()==null?"":dto.getIpAddress());
+        entity.setMac(dto.getMac()==null?"":dto.getMac());
+        entity.setName(dto.getName()==null?"":dto.getName());
+        entity.setOs(dto.getOs()==null?"":dto.getOs());
+        entity.setSystemType(dto.getSystemType()==null?"":dto.getSystemType());
+        entity.setCpu(dto.getCpu()==null?"":dto.getCpu());
+        entity.setRam(dto.getRam());
+        entity.setLocation(dto.getLocation());
+        entity.setRemoteAccess(dto.getRemoteAccess());
+        entity.setAdminRight(dto.getAdminRight());
+        entity.setFirewall(dto.getFirewall());
+
+        entity.setHasLicence(dto.getHasLicence());
+        entity.setThreeGModem(dto.getThreeGModem());
+        entity.setInternet(dto.getInternet());
+        entity.setNetworkStatus(dto.getNetworkStatus());
+
+        entity.setDvd(dto.getDvd());
+        entity.setStartUpApps(dto.getStartUpApps());
+        entity.setInstalledApps(dto.getInstalledApps());
+        entity.setUps(dto.getUps());
+        entity.setPlomba(dto.getPlomba());
+        entity.setSocialAppsInDesktop(dto.getSocialAppsInDesktop());
+
+        entity.setHasAntivirusPsw(dto.getHasAntivirusPsw());
+        JsonEntity updateSave = jsonRepository.save(entity);
+
+        antivirusService.update(dto.getAntivirus(),updateSave);
+        usbService.update(dto.getUsb(),updateSave);
+        socialAppsInBrowserService.update(dto.getSocialAppsInBrowser(),updateSave);
+        JsonDTO jsonDTO = getJsonDTO(get(updateSave.getId()));
+        return new Response(200,"success",jsonDTO);
+
     }
 
     private JsonEntity get(Integer jsonId) {

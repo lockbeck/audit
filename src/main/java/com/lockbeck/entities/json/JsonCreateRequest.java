@@ -1,7 +1,7 @@
 package com.lockbeck.entities.json;
 
 import com.lockbeck.entities.json.antivirus.AntivirusCreateRequest;
-import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowserCreateRequest;
+import com.lockbeck.entities.json.social_app_in_browser.SocialAppsInBrowserCreateRequest;
 import com.lockbeck.entities.json.usb.USBCreateRequest;
 import lombok.*;
 
