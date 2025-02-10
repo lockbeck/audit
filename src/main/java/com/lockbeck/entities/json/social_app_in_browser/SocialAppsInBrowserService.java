@@ -1,4 +1,4 @@
-package com.lockbeck.entities.json.social_app_in_browse;
+package com.lockbeck.entities.json.social_app_in_browser;
 
 import com.lockbeck.entities.json.JsonEntity;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class SocialAppsInBrowserService {
     }
 
     public List<SocialAppsInBrowserDTO> getList(Integer jsonId) {
-        List<SocialAppsInBrowser> byJsonId = socialAppsInBrowserRepository.findByJsonId(jsonId);
+        List<SocialAppsInBrowser> byJsonId = socialAppsInBrowserRepository.findAllByJsonId(jsonId);
         List<SocialAppsInBrowserDTO> socialAppsInBrowserDTOs = new ArrayList<>();
         for (SocialAppsInBrowser socialApp : byJsonId) {
             SocialAppsInBrowserDTO build = SocialAppsInBrowserDTO.builder()
@@ -43,5 +43,27 @@ public class SocialAppsInBrowserService {
     public void delete(SocialAppsInBrowser socialAppsInBrowser) {
         socialAppsInBrowser.setJson(null);
         socialAppsInBrowserRepository.delete(socialAppsInBrowser);
+    }
+
+    public void update(List<SocialAppsInBrowserUpdateRequest> dtoList, JsonEntity updateSave) {
+        List<SocialAppsInBrowser> entityList = socialAppsInBrowserRepository.findAllByJsonId(updateSave.getId());
+
+        for (SocialAppsInBrowser entity : entityList) {
+            for (SocialAppsInBrowserUpdateRequest dto : dtoList) {
+                if(entity.getId().equals(dto.getId())) {
+                    entity.setName(dto.getName());
+                    entity.setUrl(dto.getUrl());
+                    entity.setLastSeen(dto.getLastSeen());
+                    socialAppsInBrowserRepository.save(entity);
+                }else{
+                    SocialAppsInBrowser newEntity = new SocialAppsInBrowser();
+                    newEntity.setName(dto.getName());
+                    newEntity.setUrl(dto.getUrl());
+                    newEntity.setLastSeen(dto.getLastSeen());
+                    newEntity.setJson(updateSave);
+                    socialAppsInBrowserRepository.save(newEntity);
+                }
+            }
+        }
     }
 }

@@ -25,7 +25,7 @@ public class UsbService {
     }
 
     public List<USBDTO> getList(Integer jsonId) {
-        List<USB> byJsonId = usbRepository.findByJsonId(jsonId);
+        List<USB> byJsonId = usbRepository.findAllByJsonId(jsonId);
         List<USBDTO> dtos = new ArrayList<>();
 
         byJsonId.forEach(usb -> {
@@ -43,5 +43,27 @@ public class UsbService {
     public void delete(USB usb) {
         usb.setJson(null);
         usbRepository.delete(usb);
+    }
+
+    public void update(List<USBUpdateRequest> usb, JsonEntity updateSave) {
+        List<USB> allByJsonId = usbRepository.findAllByJsonId(updateSave.getId());
+
+        for (USB entity : allByJsonId) {
+            for (USBUpdateRequest dto : usb) {
+                if(entity.getId().equals(dto.getId())) {
+                    entity.setDescription(dto.getDescription());
+                    entity.setDeviceId(dto.getDeviceId());
+                    entity.setPNPDeviceID(dto.getPNPDeviceID());
+                    usbRepository.save(entity);
+                }else{
+                    USB newUsb = new USB();
+                    newUsb.setDeviceId(dto.getDeviceId());
+                    newUsb.setPNPDeviceID(dto.getPNPDeviceID());
+                    newUsb.setDescription(dto.getDescription());
+                    newUsb.setJson(updateSave);
+                    usbRepository.save(newUsb);
+                }
+            }
+        }
     }
 }

@@ -18,13 +18,10 @@ public class USB {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @JsonProperty("DeviceId")
     private String deviceId;
 
-    @JsonProperty("PNPDeviceID")
     private String pNPDeviceID;
 
-    @JsonProperty("Description")
     private String description;
     @ManyToOne
     @JoinColumn(name = "json_id")

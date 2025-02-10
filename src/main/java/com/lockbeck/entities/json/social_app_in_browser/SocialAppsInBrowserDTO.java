@@ -1,4 +1,4 @@
-package com.lockbeck.entities.json.social_app_in_browse;
+package com.lockbeck.entities.json.social_app_in_browser;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -28,7 +28,7 @@ public class AntivirusService {
     }
 
     public List<AntivirusDTO> getList(Integer jsonId ) {
-        List<Antivirus> byJsonId = antivirusRepository.findByJsonId(jsonId);
+        List<Antivirus> byJsonId = antivirusRepository.findAllByJsonId(jsonId);
         List<AntivirusDTO> dtos = new ArrayList<>();
         byJsonId.forEach(entity -> {
             AntivirusDTO build = AntivirusDTO.builder()
@@ -45,5 +45,28 @@ public class AntivirusService {
     public void delete(Antivirus antivirus) {
         antivirus.setJson(null);
         antivirusRepository.delete(antivirus);
+    }
+
+    public void update(List<AntivirusUpdateRequest> antivirus, JsonEntity updateSave) {
+        List<Antivirus> antivirusList = antivirusRepository.findAllByJsonId(updateSave.getId());
+
+        for (Antivirus entity : antivirusList) {
+            for (AntivirusUpdateRequest dto : antivirus) {
+                if(entity.getId().equals(dto.getId())) {
+                    entity.setName(dto.getName());
+                    entity.setStatus(dto.getStatus());
+                    entity.setUpdatedAt(dto.getUpdatedAt());
+                    antivirusRepository.save(entity);
+
+                }else {
+                    Antivirus newAntivirus = new Antivirus();
+                    newAntivirus.setName(entity.getName());
+                    newAntivirus.setStatus(entity.getStatus());
+                    newAntivirus.setUpdatedAt(dto.getUpdatedAt());
+                    newAntivirus.setJson(updateSave);
+                    antivirusRepository.save(newAntivirus);
+                }
+            }
+        }
     }
 }

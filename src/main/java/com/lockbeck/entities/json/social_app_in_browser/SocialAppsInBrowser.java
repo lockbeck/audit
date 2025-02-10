@@ -1,4 +1,4 @@
-package com.lockbeck.entities.json.social_app_in_browse;
+package com.lockbeck.entities.json.social_app_in_browser;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,14 +18,11 @@ public class SocialAppsInBrowser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @JsonProperty("Name")
     private String name;
 
-    @JsonProperty("Url")
     @Column(columnDefinition = "varchar(10000)")
     private String url;
 
-    @JsonProperty("LastSeen")
     private String lastSeen;
 
     @ManyToOne

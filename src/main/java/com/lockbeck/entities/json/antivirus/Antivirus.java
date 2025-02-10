@@ -18,13 +18,11 @@ public class Antivirus{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @JsonProperty("Name")
+
     private String name;
 
-    @JsonProperty("Status")
     private String status;
 
-    @JsonProperty("UpdatedAt")
     private String updatedAt;
 
     @ManyToOne
