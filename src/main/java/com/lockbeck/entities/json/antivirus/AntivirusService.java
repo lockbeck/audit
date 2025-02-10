@@ -1,14 +1,11 @@
 package com.lockbeck.entities.json.antivirus;
 
-import com.lockbeck.demo.Response;
 import com.lockbeck.entities.json.JsonEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.xml.stream.events.DTD;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
