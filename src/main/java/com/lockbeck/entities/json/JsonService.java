@@ -11,7 +11,6 @@ import com.lockbeck.entities.json.social_app_in_browse.SocialAppsInBrowserServic
 import com.lockbeck.entities.json.usb.USB;
 import com.lockbeck.entities.json.usb.UsbRepository;
 import com.lockbeck.entities.json.usb.UsbService;
-import com.lockbeck.exceptions.BadRequestException;
 import com.lockbeck.exceptions.NotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
