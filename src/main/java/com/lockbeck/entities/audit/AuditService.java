@@ -7,6 +7,7 @@ import com.lockbeck.entities.contract.ContractEntity;
 import com.lockbeck.entities.contract.ContractService;
 import com.lockbeck.entities.file.FileEntity;
 import com.lockbeck.entities.file.FileService;
+import com.lockbeck.entities.json.JsonService;
 import com.lockbeck.entities.letter.LetterEntity;
 import com.lockbeck.entities.letter.LetterService;
 import com.lockbeck.entities.report.ReportEntity;
@@ -29,6 +30,7 @@ public class AuditService {
     private final ReportService reportService;
     private final FileService fileService;
     private final LocalDateFormatter localDateFormatter;
+    private final JsonService jsonService;
 
     public Response create(AuditCreateRequest request) {
         AuditEntity entity = new AuditEntity();
@@ -181,6 +183,7 @@ public class AuditService {
         auditEntity.setContract(null);
         auditEntity.setReport(null);
         auditEntity.setListDoc(null);
+        jsonService.deleteByAuditId(auditEntity.getId());
         repository.delete(auditEntity);
         letterService.delete(inLetter);
         if(outLetter != null) {

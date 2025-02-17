@@ -3,6 +3,7 @@ package com.lockbeck.entities.json;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lockbeck.demo.Response;
 import com.lockbeck.entities.audit.AuditEntity;
+import com.lockbeck.entities.audit.AuditRepository;
 import com.lockbeck.entities.audit.AuditService;
 import com.lockbeck.entities.json.antivirus.*;
 import com.lockbeck.entities.json.social_app_in_browser.SocialAppsInBrowser;
@@ -39,7 +40,6 @@ public class JsonService {
     private final AntivirusRepository antivirusRepository;
     private final UsbRepository usbRepository;
     private final SocialAppsInBrowserRepository socialAppsInBrowserRepository;
-    private final AuditService auditService;
 
     private static final List<String> ILLEGAL_SOFTWARES = List.of("Telegram Desktop", "AnyDesk");
     private final AntivirusService antivirusService;
@@ -70,12 +70,13 @@ public class JsonService {
         socialAppsInBrowserService.create(request.getSocialAppsInBrowser(), save);
 
     }*/
-    private static final String JSON_FOLDER_PATH = "X:\\Attestatsiya va sertifikatsiya departamenti\\ОТДЕЛ АТТЕСТАЦИИ КИИ\\2025\\15. Изучения\\navoiyazot\\NavoiyAzot AJ - Copy";
+    private static final String JSON_FOLDER_PATH = "C:\\Users\\l.turdaliyev\\Downloads\\updated_jsonfiles\\updated_jsonfiles";
+    private final AuditRepository auditRepository;
 
 
     @Transactional
     public Response processJsonFiles(List<File> jsonFiles, Integer auditId)  {
-        AuditEntity auditEntity = auditService.get(auditId);
+        AuditEntity auditEntity = getAudit(auditId);
         for (File jsonFile : jsonFiles) {
 
             JsonEntity jsonEntity = new JsonEntity();
@@ -807,7 +808,7 @@ public class JsonService {
         entity.setSocialAppsInDesktop(dto.getSocialAppsInDesktop());
 
         entity.setHasAntivirusPsw(dto.getHasAntivirusPsw());
-        entity.setAudit(auditService.get(auditId));
+        entity.setAudit(getAudit(auditId));
         JsonEntity save = jsonRepository.save(entity);
 
         antivirusService.create(dto.getAntivirus(), save);
@@ -872,5 +873,20 @@ public class JsonService {
             delete(jsonEntity);
         });
         return new Response(200,"success");
+    }
+
+    public AuditEntity getAudit(Integer id) {
+        Optional<AuditEntity> byId = auditRepository.findById(id);
+        if (byId.isEmpty()) {
+            throw new NotFoundException("Audit topilmadi id: " + id);
+        }
+        return byId.get();
+    }
+
+    public void deleteByAuditId(Integer id) {
+        for (JsonEntity jsonEntity : jsonRepository.findAllByAuditId(id)) {
+            delete(jsonEntity);
+        }
+
     }
 }
